@@ -1,20 +1,16 @@
-<div style="text-align:center">
+<!-- <div style="text-align:center">
   <h1>
     Welcome to Tagger
   </h1>
   <div class="synset" *ngFor="let item of relations">
-    <span class="synset-id">{{item.senseID}}</span>
+    <span class="synset-id">{{item.senseID}} </span>
     <span class="synset-word">{{item.word}}</span>
     <div class="relations" *ngFor="let rel of item.content">
+      {{rel.relationName}} - 
+      {{rel.synsetID}}
       {{rel.name}}
-      {{rel.from}}
     </div>
   </div>
-  <!-- <div *ngFor="let item of relations">
-    <div *ngFor="let rel of item">
-        {{rel.name}}
-        {{rel.from}}
-    </div>
-  </div> -->
-</div>
-
+  <button (click)="logOnClick()">Loguj</button>
+</div> -->
+<app-test></app-test>
