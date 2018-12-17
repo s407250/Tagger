@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { TestService } from '../services/test.service';
 import { PlWordnetService } from '../services/plwordnet.service';
 import { NgForm } from '@angular/forms';
+import { Relation } from '../models/relation.interface';
 
 @Component({
   selector: 'app-test',
@@ -13,12 +14,18 @@ export class TestComponent implements OnInit {
   @ViewChild('f') Articleform: NgForm;
   constructor(private testService: TestService, private plWordnetService: PlWordnetService) { }
   ready = -1;
-  outputTable = [{
+  filteredWords3 = [];
+
+  // outputTable = [{
+  //   word1: '',
+  //   rel: '',
+  //   word2: '',
+  // }];
+  outputTable: Relation[] = [{
     word1: '',
     rel: '',
     word2: '',
   }];
-
   final = [];
   relationsNameTable = [];
 
@@ -88,7 +95,6 @@ export class TestComponent implements OnInit {
     });
     console.log('filteredRel2', helpTable);
   }
-  filteredWords3: any[];
   filterWords3(event, index) {
     this.filteredWords3 = [];
     const helpTable = this.final
@@ -105,11 +111,12 @@ export class TestComponent implements OnInit {
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
           this.filteredWords3.push(word);
         }
-      })
+      });
   }
 
 
   addNewRelation(index) {
+  
     this.outputTable[index]['rel2'] = '';
     this.outputTable[index]['word3'] = '';
   }
@@ -207,6 +214,10 @@ export class TestComponent implements OnInit {
         });
       });
     });
+  }
+
+  isDefined (field) {
+    return typeof field === 'string';
   }
 
   onSubmit(f) {
