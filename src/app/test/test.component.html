@@ -1,8 +1,85 @@
 <div class="all">
-    <div class="panel">
+    <div class="search-bar">
         <input style="font-size:18pt;height:20px;width:200px;" type="text" #input>
-        <button style="font-size:14pt;height:25px;width:200px;" (click)="logOnClick(input.value)">Search</button>
+        <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
+        <div *ngIf="ready === -1">READY TO GO</div>
+        <div *ngIf="ready === 0">PROCESSING</div>
+        <div *ngIf="ready === 1">DONE</div>
     </div>
+        <!-- <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+            <div 
+            id="user-data"
+            ngModelGroup="userData"
+            #userData="ngModelGroup">
+              <div class="top">
+                <div class="title-input">
+                  <div class="form-group">
+                    <input 
+                      type="text" 
+                      id="title" 
+                      class="form-control" 
+                      ngModel
+                      name="title" 
+                      required
+                      #title="ngModel"
+                      placeholder="TITLE">
+                  </div>
+                </div>
+                <div class="category-input">
+                  <div class="form-group">
+                    <select 
+                      class="form-control" 
+                      id="category" 
+                      name="category"
+                      required>
+                      <option value="-1" disabled selected hidden>CATEGORY</option>
+                      <option *ngFor="let relations of relationsNameTable; let i = index"
+                        [value]="i">
+                        {{ relations }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="down">
+                <div class="form-group">
+                  <input 
+                    type="text" 
+                    id="content" 
+                    class="form-control" 
+                    ngModel
+                    name="content" 
+                    required
+                    pattern = '^[\s\S]*watch\?v=([\s\S]{11})$'
+                    placeholder="CONTENT">
+                </div>
+              </div>
+            </div>
+            <button
+              class="button btn btn-warning btn-lg btn-block"
+              type="submit" 
+              [disabled]="!f.valid">
+              SUBMIT
+            </button>
+        </form> -->
+        <div class="panel">
+          <div *ngFor="let item of outputTable; index as i" class="input-panel">
+            <div class="input-fields">
+                <p-autoComplete class="in" [size]="30" [placeholder]="'word 1'" [(ngModel)]="item.word1" [suggestions]="filteredWords1" (completeMethod)="filterWords1($event, i)" [dropdown]="true"></p-autoComplete>
+                <p-autoComplete class="in" [size]="30" [placeholder]="'Relation from word 2 to word 1'" [(ngModel)]="item.rel" [suggestions]="filteredRel" (completeMethod)="filterRelations($event, i)" [dropdown]="true"></p-autoComplete>
+                <p-autoComplete class="in" [size]="30" [placeholder]="'word 2'" [(ngModel)]="item.word2" [suggestions]="filteredWords2" (completeMethod)="filterWords2($event, i)" [dropdown]="true"></p-autoComplete>
+                <!-- <button *ngIf="!item.hasOwnProperty('rel2')" (click)="addNewRelation(i)">ADD</button> -->
+                <button *ngIf="!(item.rel2 !== undefined)" (click)="addNewRelation(i)">ADD</button>
+                <p-autoComplete *ngIf="(item.rel2 !== undefined)" class="in" [size]="30" [placeholder]="'Relation from word 2 to word 1'" [(ngModel)]="item.rel2" [suggestions]="filteredRel2" (completeMethod)="filterRelations2($event, i)" [dropdown]="true"></p-autoComplete>
+                <p-autoComplete *ngIf="(item.rel2 !== undefined)" class="in" [size]="30" [placeholder]="'word 2'" [(ngModel)]="item.word3" [suggestions]="filteredWords3" (completeMethod)="filterWords3($event, i)" [dropdown]="true"></p-autoComplete>
+            </div>
+            <div class="buttons">
+                <button class ="anohter-input" (click)="anotherInput()"> + </button>
+                <button *ngIf="i > 0" class="delete-button" (click)="deleteElement(i)"> - </button>
+            </div>
+          </div>
+          <button class="finish-button" (click)="finish()">Finish</button>
+        </div>
     <div *ngFor="let item of final" class="top-list">
         <div class="top-word">
             <span class="word">word: {{item.word}}</span>
