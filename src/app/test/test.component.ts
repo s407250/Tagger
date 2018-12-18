@@ -36,7 +36,9 @@ export class TestComponent implements OnInit {
     for (let i = 0; i < this.final.length; i++) {
         const word = this.final[i].word;
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+          if (!this.filteredWords1.includes(word)) {
             this.filteredWords1.push(word);
+          }
         }
     }
   }
@@ -50,7 +52,9 @@ export class TestComponent implements OnInit {
       element.content.forEach(tmp => {
         const rel = tmp.relationName;
         if (rel.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+          if (!this.filteredRel.includes(rel)) {
             this.filteredRel.push(rel);
+          }
         }
       });
     });
@@ -60,17 +64,18 @@ export class TestComponent implements OnInit {
   word2: string;
   filteredWords2: any[];
   filterWords2(event, index) {
-    this.filteredWords1 = [];
+    this.filteredWords2 = [];
     const helpTable = this.final
       .filter((table) => table.word === this.outputTable[index].word1)
       .map(({content}) => content)
       .reduce((prev, curr) => [...prev, ...curr], [])
       .filter(obj => obj.relationName === this.outputTable[index].rel);
-    this.filteredWords2 = [];
     helpTable.forEach(element => {
       const word = element.synsetName;
       if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-        this.filteredWords2.push(word);
+        if (!this.filteredWords2.includes(word)) {
+          this.filteredWords2.push(word);
+        }
       }
     });
     console.log('filteredWords2', helpTable);
@@ -90,7 +95,9 @@ export class TestComponent implements OnInit {
     helpTable.forEach(element => {
       const rel = element.relationName;
       if (rel.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-        this.filteredRel2.push(rel);
+        if (!this.filteredRel2.includes(rel)) {
+          this.filteredRel2.push(rel);
+        }
       }
     });
     console.log('filteredRel2', helpTable);
@@ -109,14 +116,15 @@ export class TestComponent implements OnInit {
       helpTable.forEach(element => {
         const word = element.synsetName;
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-          this.filteredWords3.push(word);
+          if (!this.filteredWords3.includes(word)) {
+            this.filteredWords3.push(word);
+          }
         }
       });
   }
 
 
   addNewRelation(index) {
-  
     this.outputTable[index]['rel2'] = '';
     this.outputTable[index]['word3'] = '';
   }
@@ -167,7 +175,7 @@ export class TestComponent implements OnInit {
                             this.testService.getUnitStringSynset(item2.synsetID).subscribe(
                               unitString2 => {
                                 item2.synsetName = unitString2;
-                                this.fillRelations();
+                                // this.fillRelations();
                               }
                             );
                           });
@@ -187,34 +195,34 @@ export class TestComponent implements OnInit {
     );
   }
 
-  fillRelations() {
-    this.final.forEach(element => {
-      element.content.forEach(x => {
-        if (!this.relationsNameTable.includes(x.relationName)) {
-          this.relationsNameTable.push(x.relationName);
-        }
-        x.content.forEach(y => {
-          if (!this.relationsNameTable.includes(y.relationName)) {
-            this.relationsNameTable.push(y.relationName);
-          }
-        });
-      });
-    });
-  }
-  fillWords() {
-    this.final.forEach(element => {
-      element.content.forEach(x => {
-        if (!this.relationsNameTable.includes(x.relationName)) {
-          this.relationsNameTable.push(x.relationName);
-        }
-        x.content.forEach(y => {
-          if (!this.relationsNameTable.includes(y.relationName)) {
-            this.relationsNameTable.push(y.relationName);
-          }
-        });
-      });
-    });
-  }
+  // fillRelations() {
+  //   this.final.forEach(element => {
+  //     element.content.forEach(x => {
+  //       if (!this.relationsNameTable.includes(x.relationName)) {
+  //         this.relationsNameTable.push(x.relationName);
+  //       }
+  //       x.content.forEach(y => {
+  //         if (!this.relationsNameTable.includes(y.relationName)) {
+  //           this.relationsNameTable.push(y.relationName);
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
+  // fillWords() {
+  //   this.final.forEach(element => {
+  //     element.content.forEach(x => {
+  //       if (!this.relationsNameTable.includes(x.relationName)) {
+  //         this.relationsNameTable.push(x.relationName);
+  //       }
+  //       x.content.forEach(y => {
+  //         if (!this.relationsNameTable.includes(y.relationName)) {
+  //           this.relationsNameTable.push(y.relationName);
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
 
   isDefined (field) {
     return typeof field === 'string';

@@ -25,10 +25,10 @@ export class TestService {
         );
     }
     getRelationsFromSynset(synsetID) {
-        return this.http.get(this.api + 'synsets/' + synsetID + '/relations/to').pipe(
-            map((res: any) => res.map(({relation, synsetFrom}) => ({
+        return this.http.get(this.api + 'synsets/' + synsetID + '/relations/from').pipe(
+            map((res: any) => res.map(({relation, synsetTo}) => ({
                 relationName: relation.name,
-                synsetID: synsetFrom.id,
+                synsetID: synsetTo.id,
                 synsetName: '',
                 content: []
             })))

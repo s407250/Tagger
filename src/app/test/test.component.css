@@ -64,18 +64,57 @@
     flex-direction: column;
 }
 .input-panel {
-    padding: 20px 0;
+    padding: 20px 0 0 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.in {
-    padding: 10px;
-}
+
 .buttons {
     padding-right: 20px;
+    padding-top: 20px;
 }
 .finish-button {
     width: 20%;
     margin: 10px auto;
+}
+.input-fields {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.inputF {
+    margin-right: 10px !important;
+}
+
+.input-fields {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.standard-fields, .additional-fields {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media (max-width: 1310px) {
+    .input-fields {
+        flex-direction: column;
+    }
+    .additional-fields {
+        justify-content: space-evenly;
+    }
+}
+@media (max-width: 924px) {
+    .standard-fields, .additional-fields {
+        flex-direction: column;
+    }
+    .inputF {
+        margin-top: 20px;
+    }
+    .input-panel {
+        justify-content: space-around;
+    }
 }

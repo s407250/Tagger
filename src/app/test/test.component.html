@@ -65,13 +65,26 @@
         <div class="panel">
           <div *ngFor="let item of outputTable; index as i" class="input-panel">
             <div class="input-fields">
-                <p-autoComplete class="in" [size]="30" [placeholder]="'word 1'" [(ngModel)]="item.word1" [suggestions]="filteredWords1" (completeMethod)="filterWords1($event, i)" [dropdown]="true"></p-autoComplete>
-                <p-autoComplete class="in" [size]="30" [placeholder]="'Relation from word 2 to word 1'" [(ngModel)]="item.rel" [suggestions]="filteredRel" (completeMethod)="filterRelations($event, i)" [dropdown]="true"></p-autoComplete>
-                <p-autoComplete class="in" [size]="30" [placeholder]="'word 2'" [(ngModel)]="item.word2" [suggestions]="filteredWords2" (completeMethod)="filterWords2($event, i)" [dropdown]="true"></p-autoComplete>
-                <!-- <button *ngIf="!item.hasOwnProperty('rel2')" (click)="addNewRelation(i)">ADD</button> -->
+              <div class="standard-fields">
+                <div class="inputF">
+                    <p-autoComplete class="in" [size]="30" [placeholder]="'word 1'" [(ngModel)]="item.word1" [suggestions]="filteredWords1" (completeMethod)="filterWords1($event, i)" [dropdown]="true"></p-autoComplete>
+                </div>
+                <div class="inputF">
+                    <p-autoComplete class="in" [size]="30" [placeholder]="'Relation from word 1 to word 2'" [(ngModel)]="item.rel" [suggestions]="filteredRel" (completeMethod)="filterRelations($event, i)" [dropdown]="true"></p-autoComplete>
+                </div>
+                <div class="inputF">
+                    <p-autoComplete class="in" [size]="30" [placeholder]="'word 2'" [(ngModel)]="item.word2" [suggestions]="filteredWords2" (completeMethod)="filterWords2($event, i)" [dropdown]="true"></p-autoComplete>
+                </div>
                 <button *ngIf="!isDefined(item.rel2)" (click)="addNewRelation(i)">ADD</button>
-                <p-autoComplete *ngIf="isDefined(item.rel2)" class="in" [size]="30" [placeholder]="'Relation from word 3 to word 2'" [(ngModel)]="item.rel2" [suggestions]="filteredRel2" (completeMethod)="filterRelations2($event, i)" [dropdown]="true"></p-autoComplete>
-                <p-autoComplete *ngIf="isDefined(item.rel2)" class="in" [size]="30" [placeholder]="'word 3'" [(ngModel)]="item.word3" [suggestions]="filteredWords3" (completeMethod)="filterWords3($event, i)" [dropdown]="true"></p-autoComplete>
+              </div>
+              <div *ngIf="isDefined(item.rel2)" class="additional-fields">
+                <div class="inputF">
+                    <p-autoComplete class="in" [size]="30" [placeholder]="'Relation from word 2 to word 3'" [(ngModel)]="item.rel2" [suggestions]="filteredRel2" (completeMethod)="filterRelations2($event, i)" [dropdown]="true"></p-autoComplete>
+                </div>
+                <div class="inputF">
+                  <p-autoComplete class="in" [size]="30" [placeholder]="'word 3'" [(ngModel)]="item.word3" [suggestions]="filteredWords3" (completeMethod)="filterWords3($event, i)" [dropdown]="true"></p-autoComplete>                    
+                </div>
+              </div>
             </div>
             <div class="buttons">
                 <button class ="anohter-input" (click)="anotherInput()"> + </button>
@@ -80,7 +93,7 @@
           </div>
           <button class="finish-button" (click)="finish()">Finish</button>
         </div>
-    <div *ngFor="let item of final" class="top-list">
+    <!-- <div *ngFor="let item of final" class="top-list">
         <div class="top-word">
             <span class="word">word: {{item.word}}</span>
             <span>senseID: {{item.senseID}}</span>
@@ -100,5 +113,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
