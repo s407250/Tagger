@@ -11,7 +11,7 @@ export class TestService {
     api = 'http://api.slowosiec.clarin-pl.eu:80/plwordnet-api/';
     getSense(word) {
         return this.http.get(this.api + 'senses/search?lemma=' + word).pipe(
-            map((res: any) => res.content.filter(({lemma}) => lemma.word.toLowerCase() === word).map(({id, lemma}) => ({
+            map((res: any) => res.content.filter(({lemma}) => lemma.word === word).map(({id, lemma}) => ({
                 senseID: id,
                 word: lemma.word,
                 synsetID: 0,
@@ -36,7 +36,7 @@ export class TestService {
     }
     getUnitStringSynset(synsetID) {
         return this.http.get(this.api + 'synsets/' + synsetID + '/unitString').pipe(
-            map((res: any) => res.value)
+            map((res: any) => res.value.replace(/\d+\s\([a-z]*\)/g, ''))
         );
     }
 }

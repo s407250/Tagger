@@ -16,29 +16,61 @@ export class TestComponent implements OnInit {
   ready = -1;
   filteredWords3 = [];
 
+  test = [
+    { 
+      name: 'lew',
+      value: 5
+    },
+    {
+      name: 'Lew',
+      value: 3
+    }
+  ]
+  existInList(word) {
+    if (this.test.some((item) => item.name == word)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   // outputTable = [{
   //   word1: '',
   //   rel: '',
   //   word2: '',
   // }];
   outputTable: Relation[] = [{
-    word1: '',
+    word1: {
+      name: '',
+      value: 0
+    },
     rel: '',
-    word2: '',
+    word2: {
+      name: '',
+      value: 0
+    },
   }];
   final = [];
   relationsNameTable = [];
+  displayNumberOfOccurrences(word) {
+    const result = this.test.find(obj => obj.name === word);
+    return result ? result.value : 0
+  }
 
-  word1: string;
   filteredWords1: any[];
   filterWords1(event, index) {
     this.filteredWords1 = [];
     for (let i = 0; i < this.final.length; i++) {
         const word = this.final[i].word;
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-          if (!this.filteredWords1.includes(word)) {
-            this.filteredWords1.push(word);
+          if (!this.filteredWords1.some((item) => item.name == word)){
+            this.filteredWords1.push({
+              name: word,
+              value: this.displayNumberOfOccurrences(word)
+            })
           }
+          // if (!this.filteredWords1.includes(word)) {
+          //   this.filteredWords1.push(word);
+          // }
         }
     }
   }
@@ -46,7 +78,7 @@ export class TestComponent implements OnInit {
   filteredRel: any[];
   rel: string;
   filterRelations(event, index) {
-    const helpTable = this.final.filter((table) => table.word === this.outputTable[index].word1);
+    const helpTable = this.final.filter((table) => table.word === this.outputTable[index].word1.name);
     this.filteredRel = [];
     helpTable.forEach(element => {
       element.content.forEach(tmp => {
@@ -61,35 +93,40 @@ export class TestComponent implements OnInit {
     console.log('filteredRel', helpTable);
   }
 
-  word2: string;
   filteredWords2: any[];
   filterWords2(event, index) {
     this.filteredWords2 = [];
     const helpTable = this.final
-      .filter((table) => table.word === this.outputTable[index].word1)
+      .filter((table) => table.word === this.outputTable[index].word1.name)
       .map(({content}) => content)
       .reduce((prev, curr) => [...prev, ...curr], [])
       .filter(obj => obj.relationName === this.outputTable[index].rel);
     helpTable.forEach(element => {
       const word = element.synsetName;
       if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-        if (!this.filteredWords2.includes(word)) {
-          this.filteredWords2.push(word);
+        if (!this.filteredWords2.some((item) => item.name == word)){
+          this.filteredWords2.push({
+            name: word,
+            value: this.displayNumberOfOccurrences(word)
+          })
         }
+        // if (!this.filteredWords2.includes(word)) {
+        //   this.filteredWords2.push(word);
+        // }
       }
     });
-    console.log('filteredWords2', helpTable);
+    console.log('filteredWords2', this.filteredWords2);
   }
 
   filteredRel2: any[]
   filterRelations2(event, index) {
     this.filteredRel2 = [];
     const helpTable = this.final
-      .filter((table) => table.word === this.outputTable[index].word1)
+      .filter((table) => table.word === this.outputTable[index].word1.name)
       .map(({content}) => content)
       .reduce((prev, curr) => [...prev, ...curr], [])
       .filter(obj => obj.relationName === this.outputTable[index].rel)
-      .filter(obj => obj.synsetName === this.outputTable[index].word2)
+      .filter(obj => obj.synsetName === this.outputTable[index].word2.name)
       .map(({content}) => content)
       .reduce((prev, curr) => [...prev, ...curr], []);
     helpTable.forEach(element => {
@@ -105,20 +142,26 @@ export class TestComponent implements OnInit {
   filterWords3(event, index) {
     this.filteredWords3 = [];
     const helpTable = this.final
-      .filter((table) => table.word === this.outputTable[index].word1)
+      .filter((table) => table.word === this.outputTable[index].word1.name)
       .map(({content}) => content)
       .reduce((prev, curr) => [...prev, ...curr], [])
       .filter(obj => obj.relationName === this.outputTable[index].rel)
-      .filter(obj => obj.synsetName === this.outputTable[index].word2)
+      .filter(obj => obj.synsetName === this.outputTable[index].word2.name)
       .map(({content}) => content)
       .reduce((prev, curr) => [...prev, ...curr], [])
       .filter(obj => obj.relationName === this.outputTable[index].rel2);
       helpTable.forEach(element => {
         const word = element.synsetName;
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-          if (!this.filteredWords3.includes(word)) {
-            this.filteredWords3.push(word);
+          if (!this.filteredWords3.some((item) => item.name == word)){
+            this.filteredWords3.push({
+              name: word,
+              value: this.displayNumberOfOccurrences(word)
+            })
           }
+          // if (!this.filteredWords3.includes(word)) {
+          //   this.filteredWords3.push(word);
+          // }
         }
       });
   }
@@ -126,23 +169,38 @@ export class TestComponent implements OnInit {
 
   addNewRelation(index) {
     this.outputTable[index]['rel2'] = '';
-    this.outputTable[index]['word3'] = '';
+    this.outputTable[index]['word3'] = {
+      name: '',
+      value: 0
+    };
   }
   search(value) {
     this.ready = 0;
     this.outputTable = [{
-      word1: '',
+      word1: {
+        name: '',
+        value: 0
+      },
       rel: '',
-      word2: ''
+      word2: {
+        name: '',
+        value: 0
+      }
     }];
     this.oneBigFunction(value);
   }
 
   anotherInput() {
     this.outputTable.push({
-      word1: '',
+      word1: {
+        name: '',
+        value: 0
+      },
       rel: '',
-      word2: ''
+      word2: {
+        name: '',
+        value: 0
+      }
     });
   }
 
@@ -158,6 +216,7 @@ export class TestComponent implements OnInit {
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
       sensesTable => {
+        console.log(sensesTable)
         sensesTable.forEach(element => {
           this.testService.getSynsetBySenseID(element.senseID).subscribe(synset => {
             element.synsetID = synset;
