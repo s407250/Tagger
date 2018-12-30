@@ -118,3 +118,18 @@
         justify-content: space-around;
     }
 }
+.itemFreq {
+    background-color: white;
+    padding: 5px;
+    margin-right: 5px;
+}
+.itemFreqName {
+    margin-right: 5px;
+}
+.itemFreqValue {
+    border-left: 1px solid black;
+    padding: 5px 0 5px 5px;
+}
+.list {
+    margin-top: 10px;
+}

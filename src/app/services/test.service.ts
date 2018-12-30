@@ -36,7 +36,15 @@ export class TestService {
     }
     getUnitStringSynset(synsetID) {
         return this.http.get(this.api + 'synsets/' + synsetID + '/unitString').pipe(
-            map((res: any) => res.value.replace(/\d+\s\([a-z]*\)/g, ''))
+            map((res: any) => res.value
+             .replace(/\s\d+\s\([a-z]*\)/g, '')
+             .replace(/^\(/g, '')
+             .replace(/\)/g, '')
+             .replace(/\s*\|/g, ',')
+             .replace(/,\s$/g, '')
+            //.replace(/\s+,/g, ',')
+            //.replace(/,$/g, '')
+            )
         );
     }
 }

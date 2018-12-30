@@ -13,21 +13,43 @@ export class TestComponent implements OnInit {
 
   @ViewChild('f') Articleform: NgForm;
   constructor(private testService: TestService, private plWordnetService: PlWordnetService) { }
-  ready = -1;
-  filteredWords3 = [];
+  //ready = -1;
+  szukane = 0;
+  znalezione = 0;
+  procent = 0;
 
-  test = [
+  listOfFrequencies = [
     { 
-      name: 'lew',
-      value: 5
+      name: 'lion',
+      value: 16
     },
     {
-      name: 'Lew',
+      name: 'cat',
       value: 3
+    },
+    {
+      name: 'big cat',
+      value: 7
+    },
+    {
+      name: 'celebrity',
+      value: 6
+    },
+    {
+      name: 'mane',
+      value: 6
+    },
+    {
+      name: 'pride',
+      value: 10
+    },
+    {
+      name: 'liger',
+      value: 10
     }
   ]
   existInList(word) {
-    if (this.test.some((item) => item.name == word)) {
+    if (this.listOfFrequencies.some((item) => item.name == word)) {
       return true;
     } else {
       return false;
@@ -52,8 +74,21 @@ export class TestComponent implements OnInit {
   final = [];
   relationsNameTable = [];
   displayNumberOfOccurrences(word) {
-    const result = this.test.find(obj => obj.name === word);
-    return result ? result.value : 0
+    //1console.log(word)
+    //let wordsFindTable = word.match(/(\w ?)+/giu)
+    let wordsFindTable = word.split(', ');
+    // s = re.split(r', ', string) rozdziela wyrazy wzgledem przecinka, przyda sie przy polskich slowach bo
+    // aktualny sposob nie radzi sobie z polskimi znakami
+    console.log(wordsFindTable);
+    let result = 0;
+    wordsFindTable.forEach(element => {
+      if (this.listOfFrequencies.find(obj => obj.name === element)) {
+        if (this.listOfFrequencies.find(obj => obj.name === element).value > result) {
+          result = this.listOfFrequencies.find(obj => obj.name === element).value;
+        }
+      }
+    });
+    return result;
   }
 
   filteredWords1: any[];
@@ -73,6 +108,7 @@ export class TestComponent implements OnInit {
           // }
         }
     }
+    this.sort(this.filteredWords1);
   }
 
   filteredRel: any[];
@@ -90,7 +126,7 @@ export class TestComponent implements OnInit {
         }
       });
     });
-    console.log('filteredRel', helpTable);
+    //console.log('filteredRel', helpTable);
   }
 
   filteredWords2: any[];
@@ -115,7 +151,8 @@ export class TestComponent implements OnInit {
         // }
       }
     });
-    console.log('filteredWords2', this.filteredWords2);
+    this.sort(this.filteredWords2);
+    //console.log('filteredWords2', this.filteredWords2);
   }
 
   filteredRel2: any[]
@@ -137,8 +174,10 @@ export class TestComponent implements OnInit {
         }
       }
     });
-    console.log('filteredRel2', helpTable);
+    //console.log('filteredRel2', helpTable);
   }
+
+  filteredWords3 = [];
   filterWords3(event, index) {
     this.filteredWords3 = [];
     const helpTable = this.final
@@ -164,6 +203,7 @@ export class TestComponent implements OnInit {
           // }
         }
       });
+      this.sort(this.filteredWords3);
   }
 
 
@@ -175,7 +215,10 @@ export class TestComponent implements OnInit {
     };
   }
   search(value) {
-    this.ready = 0;
+    //this.ready = 0;
+    this.szukane = 0;
+    this.znalezione = 0;
+    this.procent = 0;
     this.outputTable = [{
       word1: {
         name: '',
@@ -206,17 +249,22 @@ export class TestComponent implements OnInit {
 
   deleteElement(index) {
     this.outputTable.splice(index, 1);
-    console.log(this.outputTable, index);
+    //console.log(this.outputTable, index);
   }
 
   finish() {
     console.log(this.outputTable);
   }
 
+  executeList() {
+    this.listOfFrequencies.forEach(element => {
+      this.oneBigFunction(element.name);
+    })
+  }
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
       sensesTable => {
-        console.log(sensesTable)
+        //console.log(sensesTable)
         sensesTable.forEach(element => {
           this.testService.getSynsetBySenseID(element.senseID).subscribe(synset => {
             element.synsetID = synset;
@@ -231,8 +279,11 @@ export class TestComponent implements OnInit {
                         relations2 => {
                           item.content = relations2;
                           item.content.forEach(item2 => {
+                          this.szukane ++;
                             this.testService.getUnitStringSynset(item2.synsetID).subscribe(
                               unitString2 => {
+                                this.znalezione ++;
+                                this.procent = +((this.znalezione/this.szukane)*100).toFixed(2);
                                 item2.synsetName = unitString2;
                                 // this.fillRelations();
                               }
@@ -247,8 +298,8 @@ export class TestComponent implements OnInit {
             );
           });
         });
-        this.final = sensesTable;
-        this.ready = 1;
+        this.final = [...this.final, ...sensesTable];
+        //this.ready = 1;
         console.log(this.final);
       }
     );
@@ -290,7 +341,13 @@ export class TestComponent implements OnInit {
   onSubmit(f) {
 
   }
-  
+  sort(table) {
+    table.sort((a, b) => {
+      if (a.value < b.value) return 1;
+      else if (a.value > b.value) return -1;
+      else return 0;
+    });
+  }
 
   ngOnInit() {
     //this.testService.getUnitStringSynset(23).subscribe(res => this.final = res);
