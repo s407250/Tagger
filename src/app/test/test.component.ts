@@ -55,11 +55,7 @@ export class TestComponent implements OnInit {
       return false;
     }
   }
-  // outputTable = [{
-  //   word1: '',
-  //   rel: '',
-  //   word2: '',
-  // }];
+
   outputTable: Relation[] = [{
     word1: {
       name: '',
@@ -74,11 +70,7 @@ export class TestComponent implements OnInit {
   final = [];
   relationsNameTable = [];
   displayNumberOfOccurrences(word) {
-    //1console.log(word)
-    //let wordsFindTable = word.match(/(\w ?)+/giu)
     let wordsFindTable = word.split(', ');
-    // s = re.split(r', ', string) rozdziela wyrazy wzgledem przecinka, przyda sie przy polskich slowach bo
-    // aktualny sposob nie radzi sobie z polskimi znakami
     console.log(wordsFindTable);
     let result = 0;
     wordsFindTable.forEach(element => {
@@ -96,7 +88,8 @@ export class TestComponent implements OnInit {
     this.filteredWords1 = [];
     for (let i = 0; i < this.final.length; i++) {
         const word = this.final[i].word;
-        if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+        if (word.toLowerCase().includes(event.query.toLowerCase())) { //includes sprawdza czy jest substringiem,
+          // indexOf === 0 sprawdza czy to co szukasz jest rowne od poczatku lini z lista podpowiedzi
           if (!this.filteredWords1.some((item) => item.name == word)){
             this.filteredWords1.push({
               name: word,
@@ -139,7 +132,7 @@ export class TestComponent implements OnInit {
       .filter(obj => obj.relationName === this.outputTable[index].rel);
     helpTable.forEach(element => {
       const word = element.synsetName;
-      if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+      if (word.toLowerCase().includes(event.query.toLowerCase())) {
         if (!this.filteredWords2.some((item) => item.name == word)){
           this.filteredWords2.push({
             name: word,
@@ -191,7 +184,7 @@ export class TestComponent implements OnInit {
       .filter(obj => obj.relationName === this.outputTable[index].rel2);
       helpTable.forEach(element => {
         const word = element.synsetName;
-        if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+        if (word.toLowerCase().includes(event.query.toLowerCase())) {
           if (!this.filteredWords3.some((item) => item.name == word)){
             this.filteredWords3.push({
               name: word,
@@ -216,6 +209,7 @@ export class TestComponent implements OnInit {
   }
   search(value) {
     //this.ready = 0;
+    this.final = [];
     this.szukane = 0;
     this.znalezione = 0;
     this.procent = 0;
@@ -257,6 +251,10 @@ export class TestComponent implements OnInit {
   }
 
   executeList() {
+    this.final = [];
+    this.szukane = 0;
+    this.znalezione = 0;
+    this.procent = 0;
     this.listOfFrequencies.forEach(element => {
       this.oneBigFunction(element.name);
     })
