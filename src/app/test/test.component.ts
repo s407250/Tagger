@@ -13,53 +13,10 @@ export class TestComponent implements OnInit {
 
   @ViewChild('f') Articleform: NgForm;
   constructor(private testService: TestService, private plWordnetService: PlWordnetService) { }
-  //ready = -1;
   szukane = 0;
   znalezione = 0;
   procent = 0;
-
-  listOfFrequencies = [
-    { 
-      name: 'lion',
-      value: 16
-    },
-    {
-      name: 'cat',
-      value: 3
-    },
-    {
-      name: 'big cat',
-      value: 7
-    },
-    {
-      name: 'celebrity',
-      value: 6
-    },
-    {
-      name: 'mane',
-      value: 6
-    },
-    {
-      name: 'pride',
-      value: 10
-    },
-    {
-      name: 'liger',
-      value: 10
-    }
-  ]
-  existInList(word) {
-    if (this.listOfFrequencies.some((item) => item.name == word)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  // outputTable = [{
-  //   word1: '',
-  //   rel: '',
-  //   word2: '',
-  // }];
+  drawTree = false; // po kliknieciu w komponencie graphic-tree bedzie sie tworzyla nowa tablica do wyswietlenia
   outputTable: Relation[] = [{
     word1: {
       name: '',
@@ -71,14 +28,57 @@ export class TestComponent implements OnInit {
       value: 0
     },
   }];
+  listOfFrequencies = [
+    {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
+    {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
+    {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
+    {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
+    {name: 'movie', value: 999}, {name: 'games', value: 999},
+    {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu
+
+
+
+    // {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
+    // {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
+    // {name: 'games', value: 999}, {name: 'toys', value: 999},
+    // {name: 'colonial', value: 999}, {name: 'stereotype', value: 999},
+    // {name: 'popular culture', value: 999}, {name: 'identity', value: 999},
+    // {name: 'Egyptian', value: 999}, {name: 'Indians', value: 999},
+    // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment
+
+    // {name: 'archaeology', value: 17}, {name: 'game', value: 17},
+    // {name: 'archaeologist', value: 16}, {name: 'movie', value: 14},
+    // {name: 'indiana jones', value: 11}, {name: 'entertainment', value: 7},
+    // {name: 'profession', value: 6}, {name: 'medium', value: 6},
+    // {name: 'lara croft', value: 5}, {name: 'heritage', value: 5},
+    // {name: 'pokotylo', value: 4}, {name: 'colonial', value: 4}, /// lista czestosci dla unitu Archaeotainment
+
+
+
+    // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
+    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999}, /// tagi do unitu Oxford Archaeology database
+
+    {name: 'data', value: 12}, {name: 'report', value: 6},
+    {name: 'developer', value: 6}, {name: 'work', value: 6},
+    {name: 'project', value: 5}, {name: 'funded', value: 4},
+    {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database
+
+
+
+  ];
+  existInList(word) {
+    if (this.listOfFrequencies.some((item) => item.name === word)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   final = [];
   relationsNameTable = [];
+
   displayNumberOfOccurrences(word) {
-    //1console.log(word)
-    //let wordsFindTable = word.match(/(\w ?)+/giu)
-    let wordsFindTable = word.split(', ');
-    // s = re.split(r', ', string) rozdziela wyrazy wzgledem przecinka, przyda sie przy polskich slowach bo
-    // aktualny sposob nie radzi sobie z polskimi znakami
+    const wordsFindTable = word.split(', ');
     console.log(wordsFindTable);
     let result = 0;
     wordsFindTable.forEach(element => {
@@ -97,16 +97,14 @@ export class TestComponent implements OnInit {
     for (let i = 0; i < this.final.length; i++) {
         const word = this.final[i].word;
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-          if (!this.filteredWords1.some((item) => item.name == word)){
+          if (!this.filteredWords1.some((item) => item.name === word)) {
             this.filteredWords1.push({
               name: word,
               value: this.displayNumberOfOccurrences(word)
-            })
+            });
           }
-          // if (!this.filteredWords1.includes(word)) {
-          //   this.filteredWords1.push(word);
-          // }
         }
+        console.log(this.filteredWords1);
     }
     this.sort(this.filteredWords1);
   }
@@ -126,7 +124,6 @@ export class TestComponent implements OnInit {
         }
       });
     });
-    //console.log('filteredRel', helpTable);
   }
 
   filteredWords2: any[];
@@ -140,19 +137,15 @@ export class TestComponent implements OnInit {
     helpTable.forEach(element => {
       const word = element.synsetName;
       if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-        if (!this.filteredWords2.some((item) => item.name == word)){
+        if (!this.filteredWords2.some((item) => item.name === word)) {
           this.filteredWords2.push({
             name: word,
             value: this.displayNumberOfOccurrences(word)
-          })
+          });
         }
-        // if (!this.filteredWords2.includes(word)) {
-        //   this.filteredWords2.push(word);
-        // }
       }
     });
     this.sort(this.filteredWords2);
-    //console.log('filteredWords2', this.filteredWords2);
   }
 
   filteredRel2: any[]
@@ -174,7 +167,6 @@ export class TestComponent implements OnInit {
         }
       }
     });
-    //console.log('filteredRel2', helpTable);
   }
 
   filteredWords3 = [];
@@ -192,15 +184,12 @@ export class TestComponent implements OnInit {
       helpTable.forEach(element => {
         const word = element.synsetName;
         if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
-          if (!this.filteredWords3.some((item) => item.name == word)){
+          if (!this.filteredWords3.some((item) => item.name === word)) {
             this.filteredWords3.push({
               name: word,
               value: this.displayNumberOfOccurrences(word)
-            })
+            });
           }
-          // if (!this.filteredWords3.includes(word)) {
-          //   this.filteredWords3.push(word);
-          // }
         }
       });
       this.sort(this.filteredWords3);
@@ -215,7 +204,7 @@ export class TestComponent implements OnInit {
     };
   }
   search(value) {
-    //this.ready = 0;
+    this.final = [];
     this.szukane = 0;
     this.znalezione = 0;
     this.procent = 0;
@@ -245,11 +234,11 @@ export class TestComponent implements OnInit {
         value: 0
       }
     });
+    console.log(this.final)
   }
 
   deleteElement(index) {
     this.outputTable.splice(index, 1);
-    //console.log(this.outputTable, index);
   }
 
   finish() {
@@ -257,14 +246,17 @@ export class TestComponent implements OnInit {
   }
 
   executeList() {
+    this.final = [];
+    this.szukane = 0;
+    this.znalezione = 0;
+    this.procent = 0;
     this.listOfFrequencies.forEach(element => {
       this.oneBigFunction(element.name);
-    })
+    });
   }
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
       sensesTable => {
-        //console.log(sensesTable)
         sensesTable.forEach(element => {
           this.testService.getSynsetBySenseID(element.senseID).subscribe(synset => {
             element.synsetID = synset;
@@ -283,9 +275,8 @@ export class TestComponent implements OnInit {
                             this.testService.getUnitStringSynset(item2.synsetID).subscribe(
                               unitString2 => {
                                 this.znalezione ++;
-                                this.procent = +((this.znalezione/this.szukane)*100).toFixed(2);
+                                this.procent = +((this.znalezione / this.szukane) * 100).toFixed(2);
                                 item2.synsetName = unitString2;
-                                // this.fillRelations();
                               }
                             );
                           });
@@ -299,8 +290,6 @@ export class TestComponent implements OnInit {
           });
         });
         this.final = [...this.final, ...sensesTable];
-        //this.ready = 1;
-        console.log(this.final);
       }
     );
   }
@@ -350,8 +339,6 @@ export class TestComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.testService.getUnitStringSynset(23).subscribe(res => this.final = res);
-    //this.oneBigFunction('lew');
   }
 
 }

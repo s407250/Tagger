@@ -1,0 +1,49 @@
+.top-list {
+    display: flex;
+    flex-direction: row;
+}
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+}
+/* .first-level-relations {
+    display: flex;
+    flex-direction: column;
+} */
+.second-level-relations {
+    display: flex;
+    flex-direction: column;
+}
+
+.top-word, .first-level, .second-level {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+
+}
+.first-level, .second-level {
+    width: 500px;
+    justify-content: space-between;
+}
+.top-word {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+.first-level {
+    border-right: 1px solid black;
+}
+.first-level-relations {
+    
+}
+.relName {
+    padding-right: 10px;
+}
+.blueColor {
+    color: blue;
+}

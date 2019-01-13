@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { mergeMap, map, flatMap, switchMap, concatMap } from 'rxjs/operators';
+import { mergeMap, map, filter, flatMap, switchMap, concatMap } from 'rxjs/operators';
 
 
 
@@ -26,6 +26,8 @@ export class TestService {
     }
     getRelationsFromSynset(synsetID) {
         return this.http.get(this.api + 'synsets/' + synsetID + '/relations/from').pipe(
+            map((res: any) => res.filter(({relation}) => !relation.name.includes('plWN'))),
+            /// nie przepuszcza dalej relacji zwiazanych z jezykiem polskim
             map((res: any) => res.map(({relation, synsetTo}) => ({
                 relationName: relation.name,
                 synsetID: synsetTo.id,

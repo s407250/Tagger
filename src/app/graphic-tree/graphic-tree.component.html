@@ -1,0 +1,24 @@
+<button (click)="drawOnlyExists = !drawOnlyExists"></button>
+{{numberOfRelationsFinded}} / {{numberOfRelations}}
+<div *ngFor="let item of outputTable" class="top-list">
+  <div class="top-word">
+      <span>{{item.word}}</span>
+      <span>{{item.value}}</span>
+  </div>
+    <div class="first-level-relations">
+      <div class="wrapper" *ngFor="let i of item.content">
+        <div class="first-level" [ngClass]="{'blueColor': i.value > 0}">
+            <span class="relName">{{i.relationName}}</span>
+            <span>{{i.synsetName}}</span>
+            <span>{{i.value}}</span>
+        </div>
+        <div class="second-level-relations">
+          <div *ngFor="let index of i.content" class="second-level" [ngClass]="{'blueColor': index.value > 0}">
+              <span class="relName">{{index.relationName}}</span>
+              <span>{{index.synsetName}}</span>
+              <span>{{index.value}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

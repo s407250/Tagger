@@ -7,9 +7,9 @@
         <div *ngIf="ready === 1">DONE</div> -->
         <div>{{procent}}%</div>{{znalezione}}/{{szukane}}
         <div class="list">
-            <span *ngFor="let item of listOfFrequencies">
-                <span class="itemFreq"><span class="itemFreqName">{{item.name}}</span><span class="itemFreqValue">{{item.value}}</span></span>
-            </span>
+            <div class="item-list">
+                <span *ngFor="let item of listOfFrequencies" class="itemFreq"><span class="itemFreqName">{{item.name}}</span><span class="itemFreqValue">{{item.value}}</span></span>
+            </div>
         <button (click)="executeList()">Execute List</button>
         </div> 
     </div>
@@ -25,10 +25,10 @@
                         </div>
                       </ng-template>
                     </p-autoComplete>
-                </div>
+                </div>IS
                 <div class="inputF">
                     <p-autoComplete class="in" [size]="30" [placeholder]="'Relation from word 1 to word 2'" [(ngModel)]="item.rel" [suggestions]="filteredRel" (completeMethod)="filterRelations($event, i)" [dropdown]="true"></p-autoComplete>
-                </div>
+                </div>OF
                 <div class="inputF">
                     <p-autoComplete field="name" class="in" [size]="30" [placeholder]="'word 2'" [(ngModel)]="item.word2" [suggestions]="filteredWords2" (completeMethod)="filterWords2($event, i)" [dropdown]="true">
                       <ng-template let-word pTemplate="template">
@@ -37,13 +37,13 @@
                           <!-- </div> -->
                       </ng-template>
                     </p-autoComplete>
-                </div>
+                </div>IS
                 <button *ngIf="!isDefined(item.rel2)" (click)="addNewRelation(i)">ADD</button>
               </div>
               <div *ngIf="isDefined(item.rel2)" class="additional-fields">
                 <div class="inputF">
                     <p-autoComplete class="in" [size]="30" [placeholder]="'Relation from word 2 to word 3'" [(ngModel)]="item.rel2" [suggestions]="filteredRel2" (completeMethod)="filterRelations2($event, i)" [dropdown]="true"></p-autoComplete>
-                </div>
+                </div>OF
                 <div class="inputF">
                   <p-autoComplete field="name" class="in" [size]="30" [placeholder]="'word 3'" [(ngModel)]="item.word3" [suggestions]="filteredWords3" (completeMethod)="filterWords3($event, i)" [dropdown]="true">
                     <ng-template let-word pTemplate="template">
@@ -62,25 +62,6 @@
           </div>
           <button class="finish-button" (click)="finish()">Finish</button>
         </div>
-    <!-- <div *ngFor="let item of final" class="top-list">
-        <div class="top-word">
-            <span class="word">word: {{item.word}}</span>
-            <span>senseID: {{item.senseID}}</span>
-            <span>synsetID: {{item.synsetID}}</span>
-        </div>
-        <div *ngFor="let i of item.content" class="first-level-relations">
-            <div class="first-level">
-                <span class="synN">{{i.synsetName}}</span>
-                <span class="relN">{{i.relationName}}</span>
-                <span>{{i.synsetID}}</span>
-            </div>
-            <div *ngFor="let index of i.content" class="second-level-relations">
-                <div class="second-level">
-                    <span class="synN">{{index.synsetName}}</span>
-                    <span class="relN2">{{index.relationName}}</span>
-                    <span>{{index.synsetID}}</span>
-                </div>
-            </div>
-        </div>
-    </div> -->
+        <button (click)="drawTree = !drawTree">Draw Tree</button>
+        <app-graphic-tree [allRelationsTable]='final' [listOfFrequencies]='listOfFrequencies' *ngIf="drawTree"></app-graphic-tree>
 </div>
