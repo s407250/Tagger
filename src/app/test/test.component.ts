@@ -12,10 +12,17 @@ import { Relation } from '../models/relation.interface';
 export class TestComponent implements OnInit {
 
   @ViewChild('f') Articleform: NgForm;
+  @ViewChild('fileImportInput') fileImportInput: any;
+
   constructor(private testService: TestService, private plWordnetService: PlWordnetService) { }
   szukane = 0;
   znalezione = 0;
   procent = 0;
+
+  csvRecords;
+  percentOfWords = 0.05;
+  index;
+
   drawTree = false; // po kliknieciu w komponencie graphic-tree bedzie sie tworzyla nowa tablica do wyswietlenia
   outputTable: Relation[] = [{
     word1: {
@@ -28,15 +35,13 @@ export class TestComponent implements OnInit {
       value: 0
     },
   }];
-  listOfFrequencies = [
+  listOfTags = [
     {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
     {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
     {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
     {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
     {name: 'movie', value: 999}, {name: 'games', value: 999},
     {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu
-
-
 
     // {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
     // {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
@@ -46,6 +51,13 @@ export class TestComponent implements OnInit {
     // {name: 'Egyptian', value: 999}, {name: 'Indians', value: 999},
     // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment
 
+    // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
+    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999}, /// tagi do unitu Oxford Archaeology database
+  ];
+
+  helpList = [];
+  listOfFrequencies = [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
+
     // {name: 'archaeology', value: 17}, {name: 'game', value: 17},
     // {name: 'archaeologist', value: 16}, {name: 'movie', value: 14},
     // {name: 'indiana jones', value: 11}, {name: 'entertainment', value: 7},
@@ -53,19 +65,10 @@ export class TestComponent implements OnInit {
     // {name: 'lara croft', value: 5}, {name: 'heritage', value: 5},
     // {name: 'pokotylo', value: 4}, {name: 'colonial', value: 4}, /// lista czestosci dla unitu Archaeotainment
 
-
-
-    // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
-    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999}, /// tagi do unitu Oxford Archaeology database
-
-    {name: 'data', value: 12}, {name: 'report', value: 6},
-    {name: 'developer', value: 6}, {name: 'work', value: 6},
-    {name: 'project', value: 5}, {name: 'funded', value: 4},
-    {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database
-
-
-
-  ];
+    // {name: 'data', value: 12}, {name: 'report', value: 6},
+    // {name: 'developer', value: 6}, {name: 'work', value: 6},
+    // {name: 'project', value: 5}, {name: 'funded', value: 4},
+    // {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database
   existInList(word) {
     if (this.listOfFrequencies.some((item) => item.name === word)) {
       return true;
@@ -104,7 +107,7 @@ export class TestComponent implements OnInit {
             });
           }
         }
-        console.log(this.filteredWords1);
+        // console.log(this.filteredWords1);
     }
     this.sort(this.filteredWords1);
   }
@@ -250,9 +253,18 @@ export class TestComponent implements OnInit {
     this.szukane = 0;
     this.znalezione = 0;
     this.procent = 0;
-    this.listOfFrequencies.forEach(element => {
-      this.oneBigFunction(element.name);
-    });
+    // this.listOfFrequencies.forEach(element => {
+    //   this.oneBigFunction(element.name);
+    // });
+    const numberOfWords = this.listOfTags.length + this.index;
+    console.log('dlugosc listy tagow: ' + this.listOfTags.length);
+    console.log('dlugosc listy czestosci: ' + this.helpList.length);
+    console.log('dlugosc calej tablicy: ' + this.listOfFrequencies.length);
+    console.log('procent z list czestosci: ' + this.percentOfWords + ' czyli ' + this.index + ' wyrazow');
+    console.log('biore ' + numberOfWords + ' wyrazow z calej tablicy');
+    for (let i = 0; i < numberOfWords; i++) {
+      this.oneBigFunction(this.listOfFrequencies[i].name);
+    }
   }
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
@@ -339,6 +351,65 @@ export class TestComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  /// DO PLIKU CSV
+
+  fileChangeListener($event: any): void {
+
+    const files = $event.srcElement.files;
+    this.helpList = [];
+    this.listOfFrequencies = [...this.listOfTags];
+
+    if (this.isCSVFile(files[0])) {
+
+      const input = $event.target;
+      const reader = new FileReader();
+      reader.readAsText(input.files[0]);
+
+      reader.onload = (data) => {
+        const csvData = reader.result;
+        const csvRecordsArray = csvData.split(/\r\n|\n/);
+
+        this.csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray);
+        this.index = Math.round(this.csvRecords.length * this.percentOfWords);
+        this.helpList.push(...this.csvRecords);
+        this.listOfFrequencies.push(...this.csvRecords);
+      };
+
+      reader.onerror = function() {
+        alert('Unable to read ' + input.files[0]);
+      };
+
+    } else {
+      alert('Please import valid .csv file.');
+      this.fileReset();
+    }
+  }
+
+  getDataRecordsArrayFromCSVFile(csvRecordsArray: any) {
+    const dataArr = [];
+
+    for (let i = 0; i < csvRecordsArray.length; i++) {
+      const data = csvRecordsArray[i].split(';');
+        dataArr.push({
+          name: data[0].trim(),
+          value: data[1].trim()
+        });
+    }
+    return dataArr;
+    // this.listOfFrequencies.concat(dataArr);
+    // console.log(this.listOfFrequencies);
+  }
+
+  isCSVFile(file: any) {
+    return file.name.endsWith('.csv');
+  }
+
+  fileReset() {
+
+    this.fileImportInput.nativeElement.value = '';
+    this.csvRecords = [];
   }
 
 }

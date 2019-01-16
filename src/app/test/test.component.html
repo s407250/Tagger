@@ -1,5 +1,6 @@
 <div class="all">
     <div class="search-bar">
+        <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" (change)="fileChangeListener($event)" accept=".csv" />
         <input style="font-size:18pt;height:30px;width:200px;" type="text" #input>
         <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
         <!-- <div *ngIf="ready === -1">READY TO GO</div>
