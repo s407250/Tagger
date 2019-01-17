@@ -36,12 +36,12 @@ export class TestComponent implements OnInit {
     },
   }];
   listOfTags = [
-    {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
-    {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
-    {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
-    {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
-    {name: 'movie', value: 999}, {name: 'games', value: 999},
-    {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu
+    // {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
+    // {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
+    // {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
+    // {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
+    // {name: 'movie', value: 999}, {name: 'games', value: 999},
+    // {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu
 
     // {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
     // {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
@@ -56,8 +56,9 @@ export class TestComponent implements OnInit {
   ];
 
   helpList = [];
-  listOfFrequencies = [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
-
+  listOfFrequencies =
+  // [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
+  [
     // {name: 'archaeology', value: 17}, {name: 'game', value: 17},
     // {name: 'archaeologist', value: 16}, {name: 'movie', value: 14},
     // {name: 'indiana jones', value: 11}, {name: 'entertainment', value: 7},
@@ -69,6 +70,7 @@ export class TestComponent implements OnInit {
     // {name: 'developer', value: 6}, {name: 'work', value: 6},
     // {name: 'project', value: 5}, {name: 'funded', value: 4},
     // {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database
+  ];
   existInList(word) {
     if (this.listOfFrequencies.some((item) => item.name === word)) {
       return true;
@@ -253,15 +255,15 @@ export class TestComponent implements OnInit {
     this.szukane = 0;
     this.znalezione = 0;
     this.procent = 0;
-    // this.listOfFrequencies.forEach(element => {
-    //   this.oneBigFunction(element.name);
-    // });
     const numberOfWords = this.listOfTags.length + this.index;
     console.log('dlugosc listy tagow: ' + this.listOfTags.length);
     console.log('dlugosc listy czestosci: ' + this.helpList.length);
     console.log('dlugosc calej tablicy: ' + this.listOfFrequencies.length);
     console.log('procent z list czestosci: ' + this.percentOfWords + ' czyli ' + this.index + ' wyrazow');
     console.log('biore ' + numberOfWords + ' wyrazow z calej tablicy');
+    // this.listOfFrequencies.forEach(element => {
+    //   this.oneBigFunction(element.name);
+    // });
     for (let i = 0; i < numberOfWords; i++) {
       this.oneBigFunction(this.listOfFrequencies[i].name);
     }
