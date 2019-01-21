@@ -12,50 +12,18 @@ import { Relation } from '../models/relation.interface';
 export class TestComponent implements OnInit {
 
   @ViewChild('f') Articleform: NgForm;
+  @ViewChild('fileImportInput') fileImportInput: any;
+
   constructor(private testService: TestService, private plWordnetService: PlWordnetService) { }
-  //ready = -1;
   szukane = 0;
   znalezione = 0;
   procent = 0;
 
-  listOfFrequencies = [
-    { 
-      name: 'lion',
-      value: 16
-    },
-    {
-      name: 'cat',
-      value: 3
-    },
-    {
-      name: 'big cat',
-      value: 7
-    },
-    {
-      name: 'celebrity',
-      value: 6
-    },
-    {
-      name: 'mane',
-      value: 6
-    },
-    {
-      name: 'pride',
-      value: 10
-    },
-    {
-      name: 'liger',
-      value: 10
-    }
-  ]
-  existInList(word) {
-    if (this.listOfFrequencies.some((item) => item.name == word)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  csvRecords;
+  percentOfWords = 0.05;
+  index;
 
+  drawTree = false; // po kliknieciu w komponencie graphic-tree bedzie sie tworzyla nowa tablica do wyswietlenia
   outputTable: Relation[] = [{
     word1: {
       name: '',
@@ -67,10 +35,84 @@ export class TestComponent implements OnInit {
       value: 0
     },
   }];
+  listOfTags = [
+  // {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
+    // {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
+    // {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
+    // {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
+    // {name: 'movie', value: 999}, {name: 'games', value: 999},
+    // {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu 1
+
+    // {name: 'cultural biography', value: 999}, {name: 'cultural biography of landscape', value: 999},
+    // {name: 'landscape', value: 999}, {name: 'object', value: 999},
+    // {name: 'historic landscape characterisation', value: 999}, /// tagi do calego modulu 2
+
+    // {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
+    // {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
+    // {name: 'games', value: 999}, {name: 'toys', value: 999},
+    // {name: 'colonial', value: 999}, {name: 'stereotype', value: 999},
+    // {name: 'popular culture', value: 999}, {name: 'identity', value: 999},
+    // {name: 'Egyptian', value: 999}, {name: 'Indians', value: 999},
+    // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment (modul 1)
+
+    // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
+    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999},/// tagi do unitu Oxford Archaeology database(modul 1)
+
+    // {name: 'United Kingdom', value: 999}, {name: 'historic landscape characterisation', value: 999},
+    // {name: 'case study', value: 999},
+    // {name: 'English Heritage', value: 999}, {name: 'landscape archaeology', value: 999},/// tagi do unitu How Historic Landscape Characterisation is used in the UK(modul 2)
+
+    // {name: 'Igartza', value: 999}, {name: 'Aranzadi Society of Sciences', value: 999},
+    // {name: 'cultural biography of landscape', value: 999}, {name: 'cultural landscape', value: 999},
+    // {name: 'restoration', value: 999}, {name: 'Spain', value: 999},
+    // {name: 'urban planning', value: 999}, {name: 'Middle Age', value: 999},
+    // {name: 'Basque Country', value: 999}, {name: 'heritage valorisation', value: 999},
+    // {name: 'identity', value: 999}, {name: 'case study', value: 999},/// tagi do unitu Igartza - Cultural biography of historical urban landscape (modul 2)
+  ];
+
+  helpList = [];
+  listOfFrequencies =
+  [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
+  // [
+    // {name: 'archaeology', value: 17}, {name: 'game', value: 17},
+    // {name: 'archaeologist', value: 16}, {name: 'movie', value: 14},
+    // {name: 'indiana jones', value: 11}, {name: 'entertainment', value: 7},
+    // {name: 'profession', value: 6}, {name: 'medium', value: 6},
+    // {name: 'lara croft', value: 5}, {name: 'heritage', value: 5},
+    // {name: 'pokotylo', value: 4}, {name: 'colonial', value: 4}, /// lista czestosci dla unitu Archaeotainment (modul 1)
+
+    // {name: 'data', value: 12}, {name: 'report', value: 6},
+    // {name: 'developer', value: 6}, {name: 'work', value: 6},
+    // {name: 'project', value: 5}, {name: 'funded', value: 4},
+    // {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database (modul 1)
+
+    // {name: 'landscape', value: 28}, {name: 'hlc', value: 19},
+    // {name: 'use', value: 13}, {name: 'project', value: 11},
+    // {name: 'process', value: 10}, {name: 'characterisation', value: 10},
+    // {name: 'map', value: 9}, {name: 'character', value: 8},
+    // {name: 'england', value: 8}, {name: 'fairclough', value: 7},
+    // {name: 'data', value: 7}, {name: 'apply', value: 6},
+    // {name: 'approach', value: 6}, {name: 'plan', value: 5},/// lista czestosci dla unitu How Historic Landscape Characterisation is used in the UK(modul 2)
+
+    // {name: 'igartza', value: 11}, {name: 'build', value: 7},
+    // {name: 'landscape', value: 7}, {name: 'plan', value: 6},
+    // {name: 'value', value: 6}, {name: 'heritage', value: 5},
+    // {name: 'preserve', value: 4}, {name: 'become', value: 4},
+    // {name: 'make', value: 4}, {name: 'ensemble', value: 4},/// lista czestosci dla unitu Igartza - Cultural biography of historical urban landscape (modul 2)
+  // ];
+  existInList(word) {
+    if (this.listOfFrequencies.some((item) => item.name === word)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   final = [];
   relationsNameTable = [];
+
   displayNumberOfOccurrences(word) {
-    let wordsFindTable = word.split(', ');
+    const wordsFindTable = word.split(', ');
     console.log(wordsFindTable);
     let result = 0;
     wordsFindTable.forEach(element => {
@@ -88,18 +130,15 @@ export class TestComponent implements OnInit {
     this.filteredWords1 = [];
     for (let i = 0; i < this.final.length; i++) {
         const word = this.final[i].word;
-        if (word.toLowerCase().includes(event.query.toLowerCase())) { //includes sprawdza czy jest substringiem,
-          // indexOf === 0 sprawdza czy to co szukasz jest rowne od poczatku lini z lista podpowiedzi
-          if (!this.filteredWords1.some((item) => item.name == word)){
+        if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+          if (!this.filteredWords1.some((item) => item.name === word)) {
             this.filteredWords1.push({
               name: word,
               value: this.displayNumberOfOccurrences(word)
-            })
+            });
           }
-          // if (!this.filteredWords1.includes(word)) {
-          //   this.filteredWords1.push(word);
-          // }
         }
+        // console.log(this.filteredWords1);
     }
     this.sort(this.filteredWords1);
   }
@@ -119,7 +158,6 @@ export class TestComponent implements OnInit {
         }
       });
     });
-    //console.log('filteredRel', helpTable);
   }
 
   filteredWords2: any[];
@@ -132,20 +170,16 @@ export class TestComponent implements OnInit {
       .filter(obj => obj.relationName === this.outputTable[index].rel);
     helpTable.forEach(element => {
       const word = element.synsetName;
-      if (word.toLowerCase().includes(event.query.toLowerCase())) {
-        if (!this.filteredWords2.some((item) => item.name == word)){
+      if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+        if (!this.filteredWords2.some((item) => item.name === word)) {
           this.filteredWords2.push({
             name: word,
             value: this.displayNumberOfOccurrences(word)
-          })
+          });
         }
-        // if (!this.filteredWords2.includes(word)) {
-        //   this.filteredWords2.push(word);
-        // }
       }
     });
     this.sort(this.filteredWords2);
-    //console.log('filteredWords2', this.filteredWords2);
   }
 
   filteredRel2: any[]
@@ -167,7 +201,6 @@ export class TestComponent implements OnInit {
         }
       }
     });
-    //console.log('filteredRel2', helpTable);
   }
 
   filteredWords3 = [];
@@ -184,16 +217,13 @@ export class TestComponent implements OnInit {
       .filter(obj => obj.relationName === this.outputTable[index].rel2);
       helpTable.forEach(element => {
         const word = element.synsetName;
-        if (word.toLowerCase().includes(event.query.toLowerCase())) {
-          if (!this.filteredWords3.some((item) => item.name == word)){
+        if (word.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+          if (!this.filteredWords3.some((item) => item.name === word)) {
             this.filteredWords3.push({
               name: word,
               value: this.displayNumberOfOccurrences(word)
-            })
+            });
           }
-          // if (!this.filteredWords3.includes(word)) {
-          //   this.filteredWords3.push(word);
-          // }
         }
       });
       this.sort(this.filteredWords3);
@@ -208,7 +238,6 @@ export class TestComponent implements OnInit {
     };
   }
   search(value) {
-    //this.ready = 0;
     this.final = [];
     this.szukane = 0;
     this.znalezione = 0;
@@ -239,11 +268,11 @@ export class TestComponent implements OnInit {
         value: 0
       }
     });
+    console.log(this.final)
   }
 
   deleteElement(index) {
     this.outputTable.splice(index, 1);
-    //console.log(this.outputTable, index);
   }
 
   finish() {
@@ -255,14 +284,22 @@ export class TestComponent implements OnInit {
     this.szukane = 0;
     this.znalezione = 0;
     this.procent = 0;
-    this.listOfFrequencies.forEach(element => {
-      this.oneBigFunction(element.name);
-    })
+    const numberOfWords = this.listOfTags.length + this.index;
+    console.log('dlugosc listy tagow: ' + this.listOfTags.length);
+    console.log('dlugosc listy czestosci: ' + this.helpList.length);
+    console.log('dlugosc calej tablicy: ' + this.listOfFrequencies.length);
+    console.log('procent z list czestosci: ' + this.percentOfWords + ' czyli ' + this.index + ' wyrazow');
+    console.log('biore ' + numberOfWords + ' wyrazow z calej tablicy');
+    // this.listOfFrequencies.forEach(element => {
+    //   this.oneBigFunction(element.name);
+    // });
+    for (let i = 0; i < numberOfWords; i++) {
+      this.oneBigFunction(this.listOfFrequencies[i].name);
+    }
   }
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
       sensesTable => {
-        //console.log(sensesTable)
         sensesTable.forEach(element => {
           this.testService.getSynsetBySenseID(element.senseID).subscribe(synset => {
             element.synsetID = synset;
@@ -281,9 +318,8 @@ export class TestComponent implements OnInit {
                             this.testService.getUnitStringSynset(item2.synsetID).subscribe(
                               unitString2 => {
                                 this.znalezione ++;
-                                this.procent = +((this.znalezione/this.szukane)*100).toFixed(2);
+                                this.procent = +((this.znalezione / this.szukane) * 100).toFixed(2);
                                 item2.synsetName = unitString2;
-                                // this.fillRelations();
                               }
                             );
                           });
@@ -297,8 +333,6 @@ export class TestComponent implements OnInit {
           });
         });
         this.final = [...this.final, ...sensesTable];
-        //this.ready = 1;
-        console.log(this.final);
       }
     );
   }
@@ -348,8 +382,65 @@ export class TestComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.testService.getUnitStringSynset(23).subscribe(res => this.final = res);
-    //this.oneBigFunction('lew');
+  }
+
+  /// DO PLIKU CSV
+
+  fileChangeListener($event: any): void {
+
+    const files = $event.srcElement.files;
+    this.helpList = [];
+    this.listOfFrequencies = [...this.listOfTags];
+
+    if (this.isCSVFile(files[0])) {
+
+      const input = $event.target;
+      const reader = new FileReader();
+      reader.readAsText(input.files[0]);
+
+      reader.onload = (data) => {
+        const csvData = reader.result;
+        const csvRecordsArray = csvData.split(/\r\n|\n/);
+
+        this.csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray);
+        this.index = Math.round(this.csvRecords.length * this.percentOfWords);
+        this.helpList.push(...this.csvRecords);
+        this.listOfFrequencies.push(...this.csvRecords);
+      };
+
+      reader.onerror = function() {
+        alert('Unable to read ' + input.files[0]);
+      };
+
+    } else {
+      alert('Please import valid .csv file.');
+      this.fileReset();
+    }
+  }
+
+  getDataRecordsArrayFromCSVFile(csvRecordsArray: any) {
+    const dataArr = [];
+
+    for (let i = 0; i < csvRecordsArray.length; i++) {
+      const data = csvRecordsArray[i].split(';');
+        dataArr.push({
+          name: data[0].trim(),
+          value: data[1].trim()
+        });
+    }
+    return dataArr;
+    // this.listOfFrequencies.concat(dataArr);
+    // console.log(this.listOfFrequencies);
+  }
+
+  isCSVFile(file: any) {
+    return file.name.endsWith('.csv');
+  }
+
+  fileReset() {
+
+    this.fileImportInput.nativeElement.value = '';
+    this.csvRecords = [];
   }
 
 }

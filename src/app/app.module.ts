@@ -10,11 +10,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { TestService } from './services/test.service';
 import { TestComponent } from './test/test.component';
 import { FormsModule } from '@angular/forms';
+import { GraphicTreeComponent } from './graphic-tree/graphic-tree.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TestComponent,
+    GraphicTreeComponent,
   ],
   imports: [
     BrowserModule,
