@@ -36,12 +36,16 @@ export class TestComponent implements OnInit {
     },
   }];
   listOfTags = [
-    // {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
+  // {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
     // {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
     // {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
     // {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
     // {name: 'movie', value: 999}, {name: 'games', value: 999},
-    // {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu
+    // {name: 'archaeotainment', value: 999}, {name: 'popular culture', value: 999}, /// tagi do calego modulu 1
+
+    // {name: 'cultural biography', value: 999}, {name: 'cultural biography of landscape', value: 999},
+    // {name: 'landscape', value: 999}, {name: 'object', value: 999},
+    // {name: 'historic landscape characterisation', value: 999}, /// tagi do calego modulu 2
 
     // {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
     // {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
@@ -49,28 +53,53 @@ export class TestComponent implements OnInit {
     // {name: 'colonial', value: 999}, {name: 'stereotype', value: 999},
     // {name: 'popular culture', value: 999}, {name: 'identity', value: 999},
     // {name: 'Egyptian', value: 999}, {name: 'Indians', value: 999},
-    // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment
+    // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment (modul 1)
 
     // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
-    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999}, /// tagi do unitu Oxford Archaeology database
+    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999},/// tagi do unitu Oxford Archaeology database(modul 1)
+
+    // {name: 'United Kingdom', value: 999}, {name: 'historic landscape characterisation', value: 999},
+    // {name: 'case study', value: 999},
+    // {name: 'English Heritage', value: 999}, {name: 'landscape archaeology', value: 999},/// tagi do unitu How Historic Landscape Characterisation is used in the UK(modul 2)
+
+    // {name: 'Igartza', value: 999}, {name: 'Aranzadi Society of Sciences', value: 999},
+    // {name: 'cultural biography of landscape', value: 999}, {name: 'cultural landscape', value: 999},
+    // {name: 'restoration', value: 999}, {name: 'Spain', value: 999},
+    // {name: 'urban planning', value: 999}, {name: 'Middle Age', value: 999},
+    // {name: 'Basque Country', value: 999}, {name: 'heritage valorisation', value: 999},
+    // {name: 'identity', value: 999}, {name: 'case study', value: 999},/// tagi do unitu Igartza - Cultural biography of historical urban landscape (modul 2)
   ];
 
   helpList = [];
   listOfFrequencies =
-  // [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
-  [
+  [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
+  // [
     // {name: 'archaeology', value: 17}, {name: 'game', value: 17},
     // {name: 'archaeologist', value: 16}, {name: 'movie', value: 14},
     // {name: 'indiana jones', value: 11}, {name: 'entertainment', value: 7},
     // {name: 'profession', value: 6}, {name: 'medium', value: 6},
     // {name: 'lara croft', value: 5}, {name: 'heritage', value: 5},
-    // {name: 'pokotylo', value: 4}, {name: 'colonial', value: 4}, /// lista czestosci dla unitu Archaeotainment
+    // {name: 'pokotylo', value: 4}, {name: 'colonial', value: 4}, /// lista czestosci dla unitu Archaeotainment (modul 1)
 
     // {name: 'data', value: 12}, {name: 'report', value: 6},
     // {name: 'developer', value: 6}, {name: 'work', value: 6},
     // {name: 'project', value: 5}, {name: 'funded', value: 4},
-    // {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database
-  ];
+    // {name: 'material', value: 4}, {name: 'oxford archaeology', value: 4}, /// lista czestosci dla unitu Oxford Archaeology database (modul 1)
+
+    // {name: 'landscape', value: 28}, {name: 'hlc', value: 19},
+    // {name: 'use', value: 13}, {name: 'project', value: 11},
+    // {name: 'process', value: 10}, {name: 'characterisation', value: 10},
+    // {name: 'map', value: 9}, {name: 'character', value: 8},
+    // {name: 'england', value: 8}, {name: 'fairclough', value: 7},
+    // {name: 'data', value: 7}, {name: 'apply', value: 6},
+    // {name: 'approach', value: 6}, {name: 'plan', value: 5},/// lista czestosci dla unitu How Historic Landscape Characterisation is used in the UK(modul 2)
+
+    // {name: 'igartza', value: 11}, {name: 'build', value: 7},
+    // {name: 'landscape', value: 7}, {name: 'plan', value: 6},
+    // {name: 'value', value: 6}, {name: 'heritage', value: 5},
+    // {name: 'preserve', value: 4}, {name: 'become', value: 4},
+    // {name: 'make', value: 4}, {name: 'ensemble', value: 4},/// lista czestosci dla unitu Igartza - Cultural biography of historical urban landscape (modul 2)
+  // ];
   existInList(word) {
     if (this.listOfFrequencies.some((item) => item.name === word)) {
       return true;
