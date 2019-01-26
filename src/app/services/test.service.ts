@@ -47,7 +47,7 @@ export class TestService {
             .replace(/\([a-z]*\)/g, '')
             .replace(/\s*\d+\s*/g, '')
             .replace(/\|/g, ',')
-            .replace(/\,/g, ', ')
+            // .replace(/\,/g, ', ') // nie wiem czemu przez to zle petle lapal
             .replace(/\,\s*$/g, '')
             )
         );
