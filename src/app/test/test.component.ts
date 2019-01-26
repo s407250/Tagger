@@ -19,6 +19,9 @@ export class TestComponent implements OnInit {
   znalezione = 0;
   procent = 0;
 
+  searchesTags = 0;
+  FoundedTags = 0;
+
   csvRecords;
   percentOfWords = 0.05;
   index;
@@ -36,7 +39,7 @@ export class TestComponent implements OnInit {
     },
   }];
   listOfTags = [
-  // {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
+    // {name: 'Web 2.0', value: 999}, {name: 'IT applications', value: 999},
     // {name: 'digital content', value: 999}, {name: 'Wiki', value: 999},
     // {name: 'archaeological heritage management', value: 999}, {name: 'United Kingdom', value: 999},
     // {name: 'academic archaeology', value: 999}, {name: 'Oxford Archaeology', value: 999},
@@ -56,7 +59,7 @@ export class TestComponent implements OnInit {
     // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment (modul 1)
 
     // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
-    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999},/// tagi do unitu Oxford Archaeology database(modul 1)
+    // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999}, /// tagi do unitu Oxford Archaeology database(modul 1)
 
     // {name: 'United Kingdom', value: 999}, {name: 'historic landscape characterisation', value: 999},
     // {name: 'case study', value: 999},
@@ -68,6 +71,9 @@ export class TestComponent implements OnInit {
     // {name: 'urban planning', value: 999}, {name: 'Middle Age', value: 999},
     // {name: 'Basque Country', value: 999}, {name: 'heritage valorisation', value: 999},
     // {name: 'identity', value: 999}, {name: 'case study', value: 999},/// tagi do unitu Igartza - Cultural biography of historical urban landscape (modul 2)
+
+
+    {name: 'lion', value: 999}, {name: 'king of beasts', value: 999}, {name: 'hair', value: 999} // TESTOWE
   ];
 
   helpList = [];
@@ -204,7 +210,7 @@ export class TestComponent implements OnInit {
   }
 
   filteredWords3 = [];
-  filterWords3(event, index) {
+  filterWords3(event, index) {/// poprawic aby w filtrowaniu tez nie pokazywalo petli
     this.filteredWords3 = [];
     const helpTable = this.final
       .filter((table) => table.word === this.outputTable[index].word1.name)
@@ -268,7 +274,7 @@ export class TestComponent implements OnInit {
         value: 0
       }
     });
-    console.log(this.final)
+    console.log(this.final);
   }
 
   deleteElement(index) {
@@ -284,22 +290,32 @@ export class TestComponent implements OnInit {
     this.szukane = 0;
     this.znalezione = 0;
     this.procent = 0;
-    const numberOfWords = this.listOfTags.length + this.index;
+    // const numberOfWords = this.listOfTags.length + this.index;
     console.log('dlugosc listy tagow: ' + this.listOfTags.length);
     console.log('dlugosc listy czestosci: ' + this.helpList.length);
     console.log('dlugosc calej tablicy: ' + this.listOfFrequencies.length);
-    console.log('procent z list czestosci: ' + this.percentOfWords + ' czyli ' + this.index + ' wyrazow');
-    console.log('biore ' + numberOfWords + ' wyrazow z calej tablicy');
+    console.log('biore ' + this.listOfTags.length + ' wyrazow z calej tablicy');
+    // console.log('procent z list czestosci: ' + this.percentOfWords + ' czyli ' + this.index + ' wyrazow');
+    // console.log('biore ' + numberOfWords + ' wyrazow z calej tablicy');
     // this.listOfFrequencies.forEach(element => {
     //   this.oneBigFunction(element.name);
     // });
-    for (let i = 0; i < numberOfWords; i++) {
+    // for (let i = 0; i < numberOfWords; i++) {
+    //   this.oneBigFunction(this.listOfFrequencies[i].name);
+    // }
+    for (let i = 0; i < this.listOfTags.length; i++) {
       this.oneBigFunction(this.listOfFrequencies[i].name);
     }
   }
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
       sensesTable => {
+        if (sensesTable.length === 0) {
+          this.searchesTags ++;
+        } else {
+          this.FoundedTags ++;
+          this.searchesTags ++;
+        }
         sensesTable.forEach(element => {
           this.testService.getSynsetBySenseID(element.senseID).subscribe(synset => {
             element.synsetID = synset;

@@ -13,22 +13,39 @@ export class GraphicTreeComponent implements OnInit {
   @Input() listOfFrequencies;
   @Input() allRelationsTable;
   constructor() { }
-  numberOfRelations = 0;
+  numberOfPositiveRelations = 0;
   numberOfRelationsFinded = 0;
+  numberOfExcludedLoops = 0;
   outputTable = [];
 
-  displayNumberOfOccurrences(word) {
+  displayNumberOfOccurrences(word, source?) {
     const wordsFindTable = word.split(', ');
-    // console.log(wordsFindTable);
     let result = 0;
-    wordsFindTable.forEach(element => {
-      if (this.listOfFrequencies.find(obj => obj.name === element)) {
-        if (this.listOfFrequencies.find(obj => obj.name === element).value > result) {
-          result = this.listOfFrequencies.find(obj => obj.name === element).value;
+    if (source) {
+      wordsFindTable.forEach(element => {
+        if (this.listOfFrequencies.find(obj => obj.name === element && obj.name !== source)) {
+          if (this.listOfFrequencies.find(obj => obj.name === element && obj.name !== source).value > result) {
+            result = this.listOfFrequencies.find(obj => obj.name === element && obj.name !== source).value;
+            // console.log(element + ': ' + result);
+          }
         }
+      });
+      if (wordsFindTable.includes(source) && result === 0) {
+        return -1;
+      } else {
+        return result;
       }
-    });
-    return result;
+      // console.log(wordsFindTable.includes(source) + ' ' + source + ': ' + result);
+    } else {
+      wordsFindTable.forEach(element => {
+        if (this.listOfFrequencies.find(obj => obj.name === element)) {
+          if (this.listOfFrequencies.find(obj => obj.name === element).value > result) {
+            result = this.listOfFrequencies.find(obj => obj.name === element).value;
+          }
+        }
+      });
+      return result;
+    }
   }
   ngOnInit() {
     this.outputTable = this.allRelationsTable.reduce((prev, curr) => { // laczy relacje do tego samego slowa w jedna tablice
@@ -44,23 +61,28 @@ export class GraphicTreeComponent implements OnInit {
     }, []);
 
     this.outputTable.forEach(element => {
-      element['value'] = this.displayNumberOfOccurrences(element.word);
+      element['value'] = this.displayNumberOfOccurrences(element.word); // pierwsze slowo
       element.content.forEach(i => {
         if (this.displayNumberOfOccurrences(i.synsetName) > 0) {
-          this.numberOfRelations ++;
+          this.numberOfPositiveRelations ++;
           this.numberOfRelationsFinded ++;
         } else {
-          this.numberOfRelations ++;
+          this.numberOfPositiveRelations ++;
         } // zlicza ile jest relacji i ile slow ma value > 0
-        i['value'] = this.displayNumberOfOccurrences(i.synsetName);
+        i['value'] = this.displayNumberOfOccurrences(i.synsetName); // drugie slowo
         i.content.forEach(y => {
-          if (this.displayNumberOfOccurrences(y.synsetName) > 0) {
-            this.numberOfRelations ++;
-            this.numberOfRelationsFinded ++;
+          if (this.displayNumberOfOccurrences(y.synsetName, element.word) === -1) {
+            // jezeli jest -1 to nic nie rob
+            this.numberOfExcludedLoops ++;
           } else {
-            this.numberOfRelations ++;
-          } // zlicza ile jest relacji i ile slow ma value > 0 w kolejnym zagniezdzeniu
-          y['value'] = this.displayNumberOfOccurrences(y.synsetName); // podpisuje wartosc wystapien slowa do value
+            if (this.displayNumberOfOccurrences(y.synsetName, element.word) > 0) { // slowo znalezione w liscie czestosic
+              this.numberOfPositiveRelations ++;
+              this.numberOfRelationsFinded ++;
+            } else {
+              this.numberOfPositiveRelations ++; // slowo NIE znalezione w liscie czestosci
+            }
+          }
+          y['value'] = this.displayNumberOfOccurrences(y.synsetName, element.word); // trzecie slowo
         });
       });
     });

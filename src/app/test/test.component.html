@@ -3,15 +3,13 @@
         <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" (change)="fileChangeListener($event)" accept=".csv" />
         <input style="font-size:18pt;height:30px;width:200px;" type="text" #input>
         <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
-        <!-- <div *ngIf="ready === -1">READY TO GO</div>
-        <div *ngIf="ready === 0">PROCESSING</div>
-        <div *ngIf="ready === 1">DONE</div> -->
         <div>{{procent}}%</div>{{znalezione}}/{{szukane}}
         <div class="list">
             <div class="item-list">
                 <span *ngFor="let item of listOfFrequencies" class="itemFreq"><span class="itemFreqName">{{item.name}}</span><span class="itemFreqValue">{{item.value}}</span></span>
             </div>
         <button (click)="executeList()">Execute List</button>
+        {{FoundedTags}} / {{searchesTags}}
         </div> 
     </div>
         <div class="panel">

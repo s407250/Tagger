@@ -1,4 +1,4 @@
-{{numberOfRelationsFinded}} / {{numberOfRelations}}
+{{numberOfRelationsFinded}} / {{numberOfPositiveRelations}} ({{numberOfExcludedLoops}})
 <div *ngFor="let item of outputTable" class="top-list">
   <div class="top-word">
       <span>{{item.word}}</span>
@@ -12,7 +12,7 @@
             <span>{{i.value}}</span>
         </div>
         <div class="second-level-relations">
-          <div *ngFor="let index of i.content" class="second-level" [ngClass]="{'blueColor': index.value > 0}">
+          <div *ngFor="let index of i.content" class="second-level" [ngClass]="{'blueColor': index.value > 0, 'redColor': index.value === -1}">
               <span class="relName">{{index.relationName}}</span>
               <span>{{index.synsetName}}</span>
               <span>{{index.value}}</span>

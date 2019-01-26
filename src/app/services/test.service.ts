@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { mergeMap, map, filter, flatMap, switchMap, concatMap } from 'rxjs/operators';
-
-
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TestService {
@@ -11,7 +9,7 @@ export class TestService {
     api = 'http://api.slowosiec.clarin-pl.eu:80/plwordnet-api/';
     getSense(word) {
         return this.http.get(this.api + 'senses/search?lemma=' + word).pipe(
-            map((res: any) => res.content.filter(({lemma}) => lemma.word === word).map(({id, lemma}) => ({
+            map((res: any) => res.content.filter(({lemma}) => lemma.word.toLowerCase() === word.toLowerCase()).map(({id, lemma}) => ({
                 senseID: id,
                 word: lemma.word,
                 synsetID: 0,
@@ -26,8 +24,8 @@ export class TestService {
     }
     getRelationsFromSynset(synsetID) {
         return this.http.get(this.api + 'synsets/' + synsetID + '/relations/from').pipe(
-            map((res: any) => res.filter(({relation}) => !relation.name.includes('plWN'))),
-            /// nie przepuszcza dalej relacji zwiazanych z jezykiem polskim
+            map((res: any) => res.filter(({relation}) => relation.lexicon.language === 'en')),
+            /// przepuszcza dalej relacje zwiazanych z jezykiem angielskim
             map((res: any) => res.map(({relation, synsetTo}) => ({
                 relationName: relation.name,
                 synsetID: synsetTo.id,
@@ -39,13 +37,18 @@ export class TestService {
     getUnitStringSynset(synsetID) {
         return this.http.get(this.api + 'synsets/' + synsetID + '/unitString').pipe(
             map((res: any) => res.value
-             .replace(/\s\d+\s\([a-z]*\)/g, '')
-             .replace(/^\(/g, '')
-             .replace(/\)/g, '')
-             .replace(/\s*\|/g, ',')
-             .replace(/,\s$/g, '')
-            //.replace(/\s+,/g, ',')
-            //.replace(/,$/g, '')
+            //  .replace(/\s\d+\s\([a-z]*\)/g, '')
+            //  .replace(/^\(/g, '')
+            //  .replace(/\)/g, '')
+            //  .replace(/\s*\|/g, ',')
+            //  .replace(/,\s$/g, '')
+            .replace(/^\(/g, '')
+            .replace(/\)$/g, '')
+            .replace(/\([a-z]*\)/g, '')
+            .replace(/\s*\d+\s*/g, '')
+            .replace(/\|/g, ',')
+            .replace(/\,/g, ', ')
+            .replace(/\,\s*$/g, '')
             )
         );
     }
