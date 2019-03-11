@@ -36,19 +36,31 @@ export class TestService {
     }
     getUnitStringSynset(synsetID) {
         return this.http.get(this.api + 'synsets/' + synsetID + '/unitString').pipe(
-            map((res: any) => res.value
-            //  .replace(/\s\d+\s\([a-z]*\)/g, '')
-            //  .replace(/^\(/g, '')
-            //  .replace(/\)/g, '')
-            //  .replace(/\s*\|/g, ',')
-            //  .replace(/,\s$/g, '')
-            .replace(/^\(/g, '')
-            .replace(/\)$/g, '')
-            .replace(/\([a-z]*\)/g, '')
-            .replace(/\s*\d+\s*/g, '')
-            .replace(/\|/g, ',')
-            // .replace(/\,/g, ', ') // nie wiem czemu przez to zle petle lapal
-            .replace(/\,\s*$/g, '')
+            map((res: any) => 
+            {
+            const words = res.value.replace(/^\(/g, '').replace(/\)$/g, '').replace(/\s\|\s$/g, '').split(/,\s|\s\|\s/);
+            const output = [];
+            words.forEach(element => {
+                output.push({
+                    word: element,
+                    value: 0
+                });
+            });
+            return output;
+            // return res.value
+            // //  .replace(/\s\d+\s\([a-z]*\)/g, '')
+            // //  .replace(/^\(/g, '')
+            // //  .replace(/\)/g, '')
+            // //  .replace(/\s*\|/g, ',')
+            // //  .replace(/,\s$/g, '')
+            // .replace(/^\(/g, '')
+            // .replace(/\)$/g, '')
+            // .replace(/\([a-z]*\)/g, '')
+            // .replace(/\s*\d+\s*/g, '')
+            // .replace(/\|/g, ',')
+            // // .replace(/\,/g, ', ') // nie wiem czemu przez to zle petle lapal
+            // .replace(/\,\s*$/g, '')
+            }
             )
         );
     }

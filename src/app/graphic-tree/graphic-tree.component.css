@@ -17,11 +17,10 @@
     flex-direction: column;
 }
 
-.top-word, .first-level, .second-level {
+.first-level, .second-level {
     display: flex;
     flex-direction: row;
     padding: 5px;
-
 }
 .first-level, .second-level {
     width: 500px;
@@ -32,8 +31,8 @@
     border-bottom: 1px solid black;
     width: 200px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between
+    flex-direction: column;
+    /* justify-content: space-between */
 }
 .first-level {
     border-right: 1px solid black;
@@ -42,11 +41,21 @@
     
 }
 .relName {
-    padding-right: 10px;
+    width: 50%;
 }
 .blueColor {
     color: blue;
 }
 .redColor {
     color: red;
+}
+.synset-words {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

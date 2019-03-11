@@ -50,13 +50,13 @@ export class TestComponent implements OnInit {
     // {name: 'landscape', value: 999}, {name: 'object', value: 999},
     // {name: 'historic landscape characterisation', value: 999}, /// tagi do calego modulu 2
 
-    // {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
-    // {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
-    // {name: 'games', value: 999}, {name: 'toys', value: 999},
-    // {name: 'colonial', value: 999}, {name: 'stereotype', value: 999},
-    // {name: 'popular culture', value: 999}, {name: 'identity', value: 999},
-    // {name: 'Egyptian', value: 999}, {name: 'Indians', value: 999},
-    // {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment (modul 1)
+    {name: 'archaeotainment', value: 999}, {name: 'movie', value: 999},
+    {name: 'Indiana Jones', value: 999}, {name: 'Lara Croft', value: 999},
+    {name: 'games', value: 999}, {name: 'toys', value: 999},
+    {name: 'colonial', value: 999}, {name: 'stereotype', value: 999},
+    {name: 'popular culture', value: 999}, {name: 'identity', value: 999},
+    {name: 'Egyptian', value: 999}, {name: 'Indians', value: 999},
+    {name: 'Africans', value: 999},                                /// tagi do unitu Archaeotainment (modul 1)
 
     // {name: 'grey literature', value: 999}, {name: 'open archaeology', value: 999},
     // {name: 'Oxford Archaeology', value: 999}, {name: 'United Kingdom', value: 999}, /// tagi do unitu Oxford Archaeology database(modul 1)
@@ -73,7 +73,7 @@ export class TestComponent implements OnInit {
     // {name: 'identity', value: 999}, {name: 'case study', value: 999},/// tagi do unitu Igartza - Cultural biography of historical urban landscape (modul 2)
 
 
-    {name: 'lion', value: 999}, {name: 'king of beasts', value: 999}, {name: 'hair', value: 999} // TESTOWE
+    // {name: 'lion', value: 999},{name: 'king of beasts', value: 999}, {name: 'hair', value: 999}, {name: 'Panthera leo', value: 999} // TESTOWE
   ];
 
   helpList = [];
@@ -307,6 +307,7 @@ export class TestComponent implements OnInit {
       this.oneBigFunction(this.listOfFrequencies[i].name);
     }
   }
+
   async oneBigFunction(word) {
     this.testService.getSense(word).subscribe(
       sensesTable => {
@@ -319,33 +320,36 @@ export class TestComponent implements OnInit {
         sensesTable.forEach(element => {
           this.testService.getSynsetBySenseID(element.senseID).subscribe(synset => {
             element.synsetID = synset;
-            this.testService.getRelationsFromSynset(element.synsetID).subscribe(
-              relations => {
-                element.content = relations;
-                element.content.forEach(item => {
-                  this.testService.getUnitStringSynset(item.synsetID).subscribe(
-                    unitString => {
-                      item.synsetName = unitString;
-                      this.testService.getRelationsFromSynset(item.synsetID).subscribe(
-                        relations2 => {
-                          item.content = relations2;
-                          item.content.forEach(item2 => {
-                          this.szukane ++;
-                            this.testService.getUnitStringSynset(item2.synsetID).subscribe(
-                              unitString2 => {
-                                this.znalezione ++;
-                                this.procent = +((this.znalezione / this.szukane) * 100).toFixed(2);
-                                item2.synsetName = unitString2;
-                              }
-                            );
-                          });
-                        }
-                      );
-                    }
-                  );
-                });
-              }
-            );
+            this.testService.getUnitStringSynset(element.synsetID).subscribe(unitString => {
+              element.word = unitString;
+              this.testService.getRelationsFromSynset(element.synsetID).subscribe(
+                relations => {
+                  element.content = relations;
+                  element.content.forEach(item => {
+                    this.testService.getUnitStringSynset(item.synsetID).subscribe(
+                      unitString1 => {
+                        item.synsetName = unitString1;
+                        this.testService.getRelationsFromSynset(item.synsetID).subscribe(
+                          relations2 => {
+                            item.content = relations2;
+                            item.content.forEach(item2 => {
+                            this.szukane ++;
+                              this.testService.getUnitStringSynset(item2.synsetID).subscribe(
+                                unitString2 => {
+                                  this.znalezione ++;
+                                  this.procent = +((this.znalezione / this.szukane) * 100).toFixed(2);
+                                  item2.synsetName = unitString2;
+                                }
+                              );
+                            });
+                          }
+                        );
+                      }
+                    );
+                  });
+                }
+              );
+            });
           });
         });
         this.final = [...this.final, ...sensesTable];
