@@ -65,11 +65,13 @@ export class GraphicTreeComponent implements OnInit {
 
     // jezeli istnieje powtorka synsetID w tablicy to lacze te dwie "jednostki" w jedna ale
     // content jest tylko z jednej jednostki zeby nie miec duplikatow
+    console.log(this.outputTable);
     this.outputTable = this.allRelationsTable.reduce((prev, curr) => {
       const element = prev.find(item => item.synsetID === curr.synsetID);
       const index = prev.indexOf(element);
       // console.log({prev, curr, index, element});
       if (index !== -1) {
+        console.log('lacze');
         prev[index].content = [...element.content];
         return prev;
       } else {
