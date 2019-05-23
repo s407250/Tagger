@@ -1,5 +1,7 @@
 <div class="info">
   <div class="info-wrapper">
+      <div><span class="info-name">search tags : </span>{{searchTags}}</div>
+      <div><span class="info-name">found tags : </span>{{foundTags}}</div>
       <div><span class="info-name">found relatios : </span>{{numberOfRelationsFinded}}</div>
       <div><span class="info-name">covered relations : </span>{{numberOfPositiveRelations}}</div>
       <div><span class="info-name">loops : </span>{{numberOfExcludedLoops}}</div>
@@ -66,7 +68,7 @@
 <div *ngFor="let item of outputTable" class="top-list">
   <div class="top-word">
       <div class="result" *ngFor="let item of item.word">
-          <span>{{item.word}}</span><span>{{item.value}}</span>
+          <span [ngClass]="{'blueColor': item.value === 'tag'}">{{item.word}}</span><span [ngClass]="{'blueColor': item.value === 'tag'}">{{item.value}}</span>
       </div>
   </div>
   <div class="first-level-relations">
@@ -74,16 +76,16 @@
       <div class="first-level">
           <span class="relName">{{i.relationName}}</span>
           <div class="synset-words">
-              <div class="result" *ngFor="let item of i.synsetName" [ngClass]="{'blueColor': item.value > 0, 'redColor': item.value === -1}">
+              <div class="result" *ngFor="let item of i.synsetName" [ngClass]="{'blueColor': item.value === 'tag' || item.value > 0, 'redColor': item.value === -1}">
                 <span>{{item.word}}</span><span>{{item.value}}</span>
               </div>
           </div>
       </div>
       <div class="second-level-relations">
-        <div *ngFor="let index of i.content" class="second-level">
+        <div *ngFor="let index of excludeLoops(i.content, -1)" class="second-level">
             <span class="relName">{{index.relationName}}</span>
             <div class="synset-words">
-                <div class="result" *ngFor="let item of index.synsetName" [ngClass]="{'blueColor': item.value > 0, 'redColor': item.value === -1}">
+                <div class="result" *ngFor="let item of index.synsetName" [ngClass]="{'blueColor': item.value === 'tag' || item.value > 0, 'redColor': item.value === -1}">
                   <span>{{item.word}}</span><span>{{item.value}}</span>
                 </div>           
             </div>

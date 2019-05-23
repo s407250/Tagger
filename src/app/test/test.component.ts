@@ -467,7 +467,7 @@ export class TestComponent implements OnInit {
     for (let i = 0; i < data.length; i++) {
       dataArr.push({
         name: data[i].trim(),
-        value: '<tag>'
+        value: 'tag'
       });
     }
     return dataArr;

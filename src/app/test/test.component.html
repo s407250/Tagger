@@ -4,13 +4,8 @@
         <input style="font-size:18pt;height:30px;width:200px;" type="text" #input>
         <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
         <div>{{procent}}%</div>{{znalezione}}/{{szukane}}
-        <!-- <div class="list">
-            <div class="item-list">
-                <span *ngFor="let item of listOfFrequencies" class="itemFreq"><span class="itemFreqName">{{item.name}}</span><span class="itemFreqValue">{{item.value}}</span></span>
-            </div> -->
         <button (click)="executeList()">Execute List</button>
-        {{FoundedTags}} / {{searchesTags}}
-        <!-- </div>  -->
+        <div>{{FoundedTags}} / {{searchesTags}}</div>
     </div>
     <div class="lists">
         <div class="list-wrapper">
@@ -80,5 +75,12 @@
           <button class="finish-button" (click)="finish()">Finish</button>
         </div> -->
     <button (click)="drawTree = !drawTree">Draw Tree</button>
-    <app-graphic-tree [allRelationsTable]='final' [listOfFrequencies]='listOfFrequencies' *ngIf="drawTree"></app-graphic-tree>
+    <app-graphic-tree
+        [listOfTags]='listOfTags'
+        [allRelationsTable]='final' 
+        [listOfFrequencies]='listOfFrequencies' 
+        [searchTags]='searchesTags' 
+        [foundTags]='FoundedTags' 
+        *ngIf="drawTree">
+    </app-graphic-tree>
 </div>

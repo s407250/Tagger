@@ -10,62 +10,49 @@ import { Relation } from '../models/relation.interface';
 
 
 export class GraphicTreeComponent implements OnInit {
+  @Input() listOfTags;
   @Input() listOfFrequencies;
   @Input() allRelationsTable;
+  @Input() searchTags;
+  @Input() foundTags;
   constructor() { }
   numberOfPositiveRelations = 0;
   numberOfRelationsFinded = 0;
   numberOfExcludedLoops = 0;
   outputTable = [];
 
+  excludeLoops(array, condition) {
+    const out = array.filter(item => item.synsetName[0].value !== condition);
+    return out;
+  }
   displayNumberOfOccurrences(synsetID, actualWord, sourceID?) {
-    // const wordsFindTable = word.split(', ');
+    
+    // slowo sprowadzam do malych liter bo w liscie czestosci oraz tagow sa z malych liter
+    const formatedWord = actualWord.replace(/\([a-z]*\)/g, '').replace(/\s*\d+\s*/g, '').toLowerCase();
+    console.log(formatedWord)
     let result = 0;
-    // if (source) {
-    //   wordsFindTable.forEach(element => {
-    //     if (this.listOfFrequencies.find(obj => obj.name === element && obj.name !== source)) {
-    //       if (this.listOfFrequencies.find(obj => obj.name === element && obj.name !== source).value > result) {
-    //         result = this.listOfFrequencies.find(obj => obj.name === element && obj.name !== source).value;
-    //         // console.log(element + ': ' + result);
-    //       }
-    //     }
-    //   });
-    //   if (wordsFindTable.includes(source) && result === 0) {
-    //     return -1;
-    //   } else {
-    //     return result;
-    //   }
-    // } else {
-    //   wordsFindTable.forEach(element => {
-    //     if (this.listOfFrequencies.find(obj => obj.name === element)) {
-    //       if (this.listOfFrequencies.find(obj => obj.name === element).value > result) {
-    //         result = this.listOfFrequencies.find(obj => obj.name === element).value;
-    //       }
-    //     }
-    //   });
-    //   return result;
-    // }
     if (!sourceID) {
-      return 999;
+      if (this.listOfTags.find(obj => obj.name === formatedWord)) {
+        result = this.listOfTags.find(obj => obj.name === formatedWord).value;
+      }
     } else {
       if (synsetID === sourceID) {
-        return -1;
+        result = -1;
       } else {
-        const formatedWord = actualWord.replace(/\([a-z]*\)/g, '').replace(/\s*\d+\s*/g, '');
           if (this.listOfFrequencies.find(obj => obj.name === formatedWord)) {
-            if (this.listOfFrequencies.find(obj => obj.name === formatedWord).value > result) {
+            if (this.listOfFrequencies.find(obj => obj.name === formatedWord).value === 'tag'
+            || this.listOfFrequencies.find(obj => obj.name === formatedWord).value > result) {
               result = this.listOfFrequencies.find(obj => obj.name === formatedWord).value;
             }
           }
-        return result;
       }
     }
+    return result;
   }
   ngOnInit() {
 
     // jezeli istnieje powtorka synsetID w tablicy to lacze te dwie "jednostki" w jedna ale
     // content jest tylko z jednej jednostki zeby nie miec duplikatow
-    console.log(this.outputTable);
     this.outputTable = this.allRelationsTable.reduce((prev, curr) => {
       const element = prev.find(item => item.synsetID === curr.synsetID);
       const index = prev.indexOf(element);
@@ -79,33 +66,6 @@ export class GraphicTreeComponent implements OnInit {
       }
     }, []);
 
-    // this.outputTable = this.allRelationsTable;
-    // this.outputTable.forEach(element => {
-    //   element['value'] = this.displayNumberOfOccurrences(element.word); // pierwsze slowo
-    //   element.content.forEach(i => {
-    //     if (this.displayNumberOfOccurrences(i.synsetName) > 0) {
-    //       this.numberOfPositiveRelations ++;
-    //       this.numberOfRelationsFinded ++;
-    //     } else {
-    //       this.numberOfPositiveRelations ++;
-    //     } // zlicza ile jest relacji i ile slow ma value > 0
-    //     i['value'] = this.displayNumberOfOccurrences(i.synsetName); // drugie slowo
-    //     i.content.forEach(y => {
-    //       if (this.displayNumberOfOccurrences(y.synsetName, element.word) === -1) {
-    //         // jezeli jest -1 to nic nie rob
-    //         this.numberOfExcludedLoops ++;
-    //       } else {
-    //         if (this.displayNumberOfOccurrences(y.synsetName, element.word) > 0) { // slowo znalezione w liscie czestosic
-    //           this.numberOfPositiveRelations ++;
-    //           this.numberOfRelationsFinded ++;
-    //         } else {
-    //           this.numberOfPositiveRelations ++; // slowo NIE znalezione w liscie czestosci
-    //         }
-    //       }
-    //       y['value'] = this.displayNumberOfOccurrences(y.synsetName, element.word); // trzecie slowo
-    //     });
-    //   });
-    // });
     this.outputTable.forEach(element => {
       element.word.forEach(word => {
         word.value = this.displayNumberOfOccurrences(element.synsetID, word.word);
@@ -114,7 +74,7 @@ export class GraphicTreeComponent implements OnInit {
         i.synsetName.forEach(word => {
           word.value = this.displayNumberOfOccurrences(i.synsetID, word.word, element.synsetID);
         });
-        i.content.forEach(y => {
+        i.content.forEach((y, index, array) => {
           y.synsetName.forEach(word => {
             word.value = this.displayNumberOfOccurrences(y.synsetID, word.word, element.synsetID);
           });
@@ -129,14 +89,14 @@ export class GraphicTreeComponent implements OnInit {
         if (el.synsetName.some(x => x.value === -1)) {
           this.numberOfExcludedLoops ++;
         }
-        if (el.synsetName.some(x => x.value > 0)) {
+        if (el.synsetName.some(x => x.value !== 0 && x.value !==-1)) {
           this.numberOfPositiveRelations ++;
         }
         el.content.forEach(e => {
           if (e.synsetName.some(x => x.value === -1)) {
             this.numberOfExcludedLoops ++;
           }
-          if (e.synsetName.some(x => x.value > 0)) {
+          if (e.synsetName.some(x => x.value !== 0 && x.value !==-1)) {
             this.numberOfPositiveRelations ++;
           }
         });
