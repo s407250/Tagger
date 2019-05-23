@@ -4,15 +4,35 @@
         <input style="font-size:18pt;height:30px;width:200px;" type="text" #input>
         <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
         <div>{{procent}}%</div>{{znalezione}}/{{szukane}}
-        <div class="list">
+        <!-- <div class="list">
             <div class="item-list">
                 <span *ngFor="let item of listOfFrequencies" class="itemFreq"><span class="itemFreqName">{{item.name}}</span><span class="itemFreqValue">{{item.value}}</span></span>
-            </div>
+            </div> -->
         <button (click)="executeList()">Execute List</button>
         {{FoundedTags}} / {{searchesTags}}
-        </div> 
+        <!-- </div>  -->
     </div>
-        <div class="panel">
+    <div class="lists">
+        <div class="list-wrapper">
+            <div class="list-header">tags</div>
+            <div class="list">
+                <span class="list-item" *ngFor="let item of listOfTags">
+                    <span class="list-item-name">{{item.name}}</span>
+                    <span class="list-item-value">{{item.value}}</span>
+                </span>
+            </div>
+        </div>
+        <div class="list-wrapper">
+            <div class="list-header">frequency list</div>
+            <div class="list">
+                <span class="list-item" *ngFor="let item of helpList">
+                    <span class="list-item-name">{{item.name}}</span>
+                    <span class="list-item-value">{{item.value}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+        <!-- <div class="panel">
           <div *ngFor="let item of outputTable; index as i" class="input-panel">
             <div class="input-fields">
               <div class="standard-fields">
@@ -31,9 +51,7 @@
                 <div class="inputF">
                     <p-autoComplete field="name" class="in" [size]="30" [placeholder]="'word 2'" [(ngModel)]="item.word2" [suggestions]="filteredWords2" (completeMethod)="filterWords2($event, i)" [dropdown]="true">
                       <ng-template let-word pTemplate="template">
-                          <!-- <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5"> -->
-                            <div style="font-size:18px;display:flex;flex-direction: row; justify-content: space-between;margin:10px 10px 0 0"><div>{{word.name}}</div> <div style="color: red">{{word.value}}</div> </div>
-                          <!-- </div> -->
+                        <div style="font-size:18px;display:flex;flex-direction: row; justify-content: space-between;margin:10px 10px 0 0"><div>{{word.name}}</div> <div style="color: red">{{word.value}}</div> </div>
                       </ng-template>
                     </p-autoComplete>
                 </div>IS
@@ -60,7 +78,7 @@
             </div>
           </div>
           <button class="finish-button" (click)="finish()">Finish</button>
-        </div>
-        <button (click)="drawTree = !drawTree">Draw Tree</button>
-        <app-graphic-tree [allRelationsTable]='final' [listOfFrequencies]='listOfFrequencies' *ngIf="drawTree"></app-graphic-tree>
+        </div> -->
+    <button (click)="drawTree = !drawTree">Draw Tree</button>
+    <app-graphic-tree [allRelationsTable]='final' [listOfFrequencies]='listOfFrequencies' *ngIf="drawTree"></app-graphic-tree>
 </div>

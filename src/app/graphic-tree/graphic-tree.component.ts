@@ -80,7 +80,6 @@ export class GraphicTreeComponent implements OnInit {
     }, []);
 
     // this.outputTable = this.allRelationsTable;
-    console.log(this.outputTable);
     // this.outputTable.forEach(element => {
     //   element['value'] = this.displayNumberOfOccurrences(element.word); // pierwsze slowo
     //   element.content.forEach(i => {
@@ -122,7 +121,7 @@ export class GraphicTreeComponent implements OnInit {
         });
       });
     });
- 
+
     this.outputTable.forEach(element => {
       this.numberOfRelationsFinded += element.content.length;
       element.content.forEach(el => {
@@ -140,9 +139,10 @@ export class GraphicTreeComponent implements OnInit {
           if (e.synsetName.some(x => x.value > 0)) {
             this.numberOfPositiveRelations ++;
           }
-        })
+        });
       });
     });
+    console.log(this.outputTable);
   }
 
 }

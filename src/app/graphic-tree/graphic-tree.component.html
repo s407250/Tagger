@@ -1,4 +1,11 @@
-{{numberOfRelationsFinded}} / {{numberOfPositiveRelations}} ({{numberOfExcludedLoops}})
+<div class="info">
+  <div class="info-wrapper">
+      <div><span class="info-name">found relatios : </span>{{numberOfRelationsFinded}}</div>
+      <div><span class="info-name">covered relations : </span>{{numberOfPositiveRelations}}</div>
+      <div><span class="info-name">loops : </span>{{numberOfExcludedLoops}}</div>
+  </div>
+</div>
+<!-- {{numberOfRelationsFinded}} / {{numberOfPositiveRelations}} ({{numberOfExcludedLoops}}) -->
 <!-- <table style="width: 100%">
     <tr>
       <th>Tag</th>
@@ -28,32 +35,60 @@
       <td>tmp 66<br>tmp 6</td>
     </tr>
   </table> -->
+<!-- <div class="element" *ngFor="let item of outputTable">
+  <div class="synset">
+    <div *ngFor="let sense of item.word">
+      {{sense.word}}:{{sense.value}}
+    </div>
+    <div class="firstRelations">
+      <div class="firtRelation" *ngFor="let rel1 of item.content">
+        {{rel1.relationName}}
+        <div class="synset">
+          <div *ngFor="let sense of rel1.synsetName">
+            {{sense.word}}:{{sense.value}}
+          </div>
+        </div>
+        <div class="secondRelations">
+          <div class="secondRelation" *ngFor="let rel2 of rel1.content">
+            {{rel2.relationName}}
+            <div class="synset">
+              <div *ngFor="let sense of rel2.synsetName">
+                {{sense.word}}:{{sense.value}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
 <div *ngFor="let item of outputTable" class="top-list">
   <div class="top-word">
       <div class="result" *ngFor="let item of item.word">
           <span>{{item.word}}</span><span>{{item.value}}</span>
       </div>
   </div>
-    <div class="first-level-relations">
-      <div class="wrapper" *ngFor="let i of item.content">
-        <div class="first-level">
-            <span class="relName">{{i.relationName}}</span>
-            <div class="synset-words">
-                <div class="result" *ngFor="let item of i.synsetName" [ngClass]="{'blueColor': item.value > 0, 'redColor': item.value === -1}">
-                  <span>{{item.word}}</span><span>{{item.value}}</span>
-                </div>
-            </div>
-        </div>
-        <div class="second-level-relations">
-          <div *ngFor="let index of i.content" class="second-level">
-              <span class="relName">{{index.relationName}}</span>
-              <div class="synset-words">
-                  <div class="result" *ngFor="let item of index.synsetName" [ngClass]="{'blueColor': item.value > 0, 'redColor': item.value === -1}">
-                    <span>{{item.word}}</span><span>{{item.value}}</span>
-                  </div>           
+  <div class="first-level-relations">
+    <div class="wrapper" *ngFor="let i of item.content">
+      <div class="first-level">
+          <span class="relName">{{i.relationName}}</span>
+          <div class="synset-words">
+              <div class="result" *ngFor="let item of i.synsetName" [ngClass]="{'blueColor': item.value > 0, 'redColor': item.value === -1}">
+                <span>{{item.word}}</span><span>{{item.value}}</span>
               </div>
           </div>
+      </div>
+      <div class="second-level-relations">
+        <div *ngFor="let index of i.content" class="second-level">
+            <span class="relName">{{index.relationName}}</span>
+            <div class="synset-words">
+                <div class="result" *ngFor="let item of index.synsetName" [ngClass]="{'blueColor': item.value > 0, 'redColor': item.value === -1}">
+                  <span>{{item.word}}</span><span>{{item.value}}</span>
+                </div>           
+            </div>
         </div>
       </div>
     </div>
+  </div>
 </div>

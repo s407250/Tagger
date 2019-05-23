@@ -1,6 +1,9 @@
 .top-list {
     display: flex;
     flex-direction: row;
+    width: 85vw;
+    margin: 0 auto;
+    border: 1px solid black;
 }
 .wrapper {
     display: flex;
@@ -8,13 +11,10 @@
     justify-content: space-between;
     border-bottom: 1px solid black;
 }
-/* .first-level-relations {
-    display: flex;
-    flex-direction: column;
-} */
 .second-level-relations {
     display: flex;
     flex-direction: column;
+    width: 50%;
 }
 
 .first-level, .second-level {
@@ -23,22 +23,25 @@
     padding: 5px;
 }
 .first-level, .second-level {
-    width: 500px;
     justify-content: space-between;
 }
 .top-word {
     border-right: 1px solid black;
     border-bottom: 1px solid black;
-    width: 200px;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between */
+    width: 20%;
+    padding: 5px;
 }
 .first-level {
     border-right: 1px solid black;
+    width: 50%
+}
+.second-level:not(:last-child) {
+    border-bottom: 1px solid black;
 }
 .first-level-relations {
-    
+    width: 80%;
 }
 .relName {
     width: 50%;
@@ -58,4 +61,17 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.info {
+    margin: 20px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+.info-name {
+    text-transform: uppercase;
+}
+.info-wrapper {
+    display: inline-block;
+    text-align: left;
 }

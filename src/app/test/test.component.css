@@ -3,7 +3,7 @@
 }
 .search-bar {
     text-align: center;
-    margin: 50px 50px;
+    margin: 50px 50px 20px 50px;
 }
 
 .panel {
@@ -68,24 +68,32 @@
         justify-content: space-around;
     }
 }
-.itemFreq {
-    display: inline-block;
-    background-color: white;
-    padding: 5px;
-    margin-right: 5px;
+
+.list-wrapper:first-child {
     margin-bottom: 10px;
-}
-.itemFreqName {
-    margin-right: 5px;
-}
-.itemFreqValue {
-    border-left: 1px solid black;
-    padding: 5px 0 5px 5px;
 }
 .list {
-    margin: 10px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 20px;
+    justify-content: center;
 }
-.item-list {
-    margin-bottom: 10px;
-    word-wrap: break-word
+.list-header {
+    text-align: center;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+.list-item {
+    padding: 5px;
+    background-color: white;
+    border: 1px solid black;
+    margin: 5px;
+}
+.list-item-name {
+    padding-right: 5px;
+    border-right: 1px solid black;
+}
+.list-item-value {
+    padding-left: 5px;
 }

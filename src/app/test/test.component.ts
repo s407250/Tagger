@@ -73,12 +73,12 @@ export class TestComponent implements OnInit {
     // {name: 'identity', value: 999}, {name: 'case study', value: 999},/// tagi do unitu Igartza - Cultural biography of historical urban landscape (modul 2)
 
 
-    {name: 'lion', value: 999},{name: 'king of beasts', value: 999}, {name: 'hair', value: 999}, {name: 'Panthera leo', value: 999} // TESTOWE
+    // {name: 'lion', value: 999},{name: 'king of beasts', value: 999}, {name: 'hair', value: 999}, {name: 'Panthera leo', value: 999} // TESTOWE
   ];
 
   helpList = [];
-  listOfFrequencies =
-  [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
+  listOfFrequencies = [];
+  // [...this.listOfTags]; // dlaczego zwykle przypisanie nie dziala?
   // [
     // {name: 'archaeology', value: 17}, {name: 'game', value: 17},
     // {name: 'archaeologist', value: 16}, {name: 'movie', value: 14},
@@ -429,8 +429,12 @@ export class TestComponent implements OnInit {
         const csvRecordsArray = csvData.split(/\r\n|\n/);
 
         this.csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray);
+        const tags = this.getTagsfromCSV(csvRecordsArray);
         this.index = Math.round(this.csvRecords.length * this.percentOfWords);
+
         this.helpList.push(...this.csvRecords);
+        this.listOfTags.push(...tags);
+        this.listOfFrequencies.push(...tags);
         this.listOfFrequencies.push(...this.csvRecords);
       };
 
@@ -447,7 +451,7 @@ export class TestComponent implements OnInit {
   getDataRecordsArrayFromCSVFile(csvRecordsArray: any) {
     const dataArr = [];
 
-    for (let i = 0; i < csvRecordsArray.length; i++) {
+    for (let i = 1; i < csvRecordsArray.length; i++) {
       const data = csvRecordsArray[i].split(';');
         dataArr.push({
           name: data[0].trim(),
@@ -455,8 +459,18 @@ export class TestComponent implements OnInit {
         });
     }
     return dataArr;
-    // this.listOfFrequencies.concat(dataArr);
-    // console.log(this.listOfFrequencies);
+  }
+
+  getTagsfromCSV(csvRecordsArray: any) {
+    const dataArr = [];
+    const data = csvRecordsArray[0].split(';');
+    for (let i = 0; i < data.length; i++) {
+      dataArr.push({
+        name: data[i].trim(),
+        value: '<tag>'
+      });
+    }
+    return dataArr;
   }
 
   isCSVFile(file: any) {
@@ -464,7 +478,6 @@ export class TestComponent implements OnInit {
   }
 
   fileReset() {
-
     this.fileImportInput.nativeElement.value = '';
     this.csvRecords = [];
   }
