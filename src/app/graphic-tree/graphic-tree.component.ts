@@ -26,10 +26,9 @@ export class GraphicTreeComponent implements OnInit {
     return out;
   }
   displayNumberOfOccurrences(synsetID, actualWord, sourceID?) {
-    
+
     // slowo sprowadzam do malych liter bo w liscie czestosci oraz tagow sa z malych liter
     const formatedWord = actualWord.replace(/\([a-z]*\)/g, '').replace(/\s*\d+\s*/g, '').toLowerCase();
-    console.log(formatedWord)
     let result = 0;
     if (!sourceID) {
       if (this.listOfTags.find(obj => obj.name === formatedWord)) {
