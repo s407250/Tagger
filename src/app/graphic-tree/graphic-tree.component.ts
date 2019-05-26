@@ -49,7 +49,8 @@ export class GraphicTreeComponent implements OnInit {
     return result;
   }
   ngOnInit() {
-
+    console.log('przed reducem')
+    console.log(this.allRelationsTable);
     // jezeli istnieje powtorka synsetID w tablicy to lacze te dwie "jednostki" w jedna ale
     // content jest tylko z jednej jednostki zeby nie miec duplikatow
     this.outputTable = this.allRelationsTable.reduce((prev, curr) => {
@@ -64,7 +65,8 @@ export class GraphicTreeComponent implements OnInit {
         return [...prev, curr];
       }
     }, []);
-
+    console.log('po reduce')
+    console.log(this.outputTable)
     this.outputTable.forEach(element => {
       element.word.forEach(word => {
         word.value = this.displayNumberOfOccurrences(element.synsetID, word.word);
@@ -80,7 +82,8 @@ export class GraphicTreeComponent implements OnInit {
         });
       });
     });
-
+    console.log('po dodaniu liczebnosci')
+    console.log(this.outputTable)
     this.outputTable.forEach(element => {
       this.numberOfRelationsFinded += element.content.length;
       element.content.forEach(el => {
@@ -101,7 +104,7 @@ export class GraphicTreeComponent implements OnInit {
         });
       });
     });
-    console.log(this.outputTable);
+    // console.log(this.outputTable);
   }
 
 }
