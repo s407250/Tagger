@@ -31,17 +31,18 @@ export class GraphicTreeComponent implements OnInit {
     const formatedWord = actualWord.replace(/\([a-z]*\)/g, '').replace(/\s*\d+\s*/g, '').toLowerCase();
     let result = 0;
     if (!sourceID) {
-      if (this.listOfTags.find(obj => obj.name === formatedWord)) {
-        result = this.listOfTags.find(obj => obj.name === formatedWord).value;
+      // w pierwszej kolumnie sprawdzam sa tagi wiec sprawdzam bez zmiany wielkosci na liscie tagow
+      if (this.listOfTags.find(obj => obj.name.toLowerCase() === formatedWord)) {
+        result = this.listOfTags.find(obj => obj.name.toLowerCase() === formatedWord).value;
       }
     } else {
       if (synsetID === sourceID) {
         result = -1;
       } else {
-          if (this.listOfFrequencies.find(obj => obj.name === formatedWord)) {
-            if (this.listOfFrequencies.find(obj => obj.name === formatedWord).value === 'tag'
-            || this.listOfFrequencies.find(obj => obj.name === formatedWord).value > result) {
-              result = this.listOfFrequencies.find(obj => obj.name === formatedWord).value;
+          if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord)) {
+            if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value === 'tag'
+            || this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value > result) {
+              result = this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value;
             }
           }
       }
@@ -49,6 +50,7 @@ export class GraphicTreeComponent implements OnInit {
     return result;
   }
   ngOnInit() {
+    console.log(this.listOfFrequencies)
     console.log('przed reducem')
     console.log(this.allRelationsTable);
     // jezeli istnieje powtorka synsetID w tablicy to lacze te dwie "jednostki" w jedna ale

@@ -453,10 +453,15 @@ export class TestComponent implements OnInit {
 
     for (let i = 1; i < csvRecordsArray.length; i++) {
       const data = csvRecordsArray[i].split(';');
+      try {
         dataArr.push({
           name: data[0].trim(),
           value: data[1].trim()
         });
+      }
+      catch {
+        console.log('skip')
+      }
     }
     return dataArr;
   }

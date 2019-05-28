@@ -78,7 +78,7 @@
           <span class="relName">{{i1+1}}.{{i2+1}} {{i.relationName}}</span>
           <div class="synset-words">
               <div class="result" *ngFor="let item of i.synsetName" [ngClass]="{'greenColor': item.value === 'tag', 'blueColor': item.value > 0, 'redColor': item.value === -1}">
-                <span>{{item.word}}</span><span>{{item.value | uppercase}}</span>
+                <span>{{item.word}}</span><span>{{item.value | uppercase}}</span><span *ngIf="item.value === 'tag'">(t)</span><span *ngIf="item.value > 0">(f)</span>
               </div>
           </div>
       </div>
@@ -87,7 +87,7 @@
             <span class="relName">{{i1+1}}.{{i2+1}}.{{i3+1}} {{index.relationName}}</span>
             <div class="synset-words">
                 <div class="result" *ngFor="let item of index.synsetName" [ngClass]="{'greenColor': item.value === 'tag', 'blueColor': item.value > 0, 'redColor': item.value === -1}">
-                  <span>{{item.word}}</span><span>{{item.value | uppercase}}</span>
+                  <span>{{item.word}}</span><span>{{item.value | uppercase}}</span><span *ngIf="item.value === 'tag'">(t)</span><span *ngIf="item.value > 0">(f)</span>
                 </div>           
             </div>
         </div>

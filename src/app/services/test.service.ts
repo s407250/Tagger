@@ -9,7 +9,6 @@ export class TestService {
     api = 'http://api.slowosiec.clarin-pl.eu:80/plwordnet-api/';
     getSense(word) {
         return this.http.get(this.api + 'senses/search?lemma=' + word).pipe(
-            // map(res => {console.log(res.content)
             map((res: any) => res.content.filter(({lexicon}) => lexicon.language === 'en')),
             map((res: any) => res.filter(({lemma}) => lemma.word.toLowerCase() === word.toLowerCase()).map(({id, lemma}) => ({
                 senseID: id,
