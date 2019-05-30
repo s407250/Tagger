@@ -3,6 +3,7 @@ import { TestService } from '../services/test.service';
 import { PlWordnetService } from '../services/plwordnet.service';
 import { NgForm } from '@angular/forms';
 import { Relation } from '../models/relation.interface';
+import { trimTrailingNulls } from '@angular/compiler/src/render3/view/util';
 
 @Component({
   selector: 'app-test',
@@ -454,13 +455,15 @@ export class TestComponent implements OnInit {
     for (let i = 1; i < csvRecordsArray.length; i++) {
       const data = csvRecordsArray[i].split(';');
       try {
-        dataArr.push({
-          name: data[0].trim(),
-          value: data[1].trim()
-        });
+        if (data[0].trim().length > 0) {
+          dataArr.push({
+            name: data[0].trim(),
+            value: data[1].trim()
+          });
+        }
       }
       catch {
-        console.log('skip')
+        // console.log('skip')
       }
     }
     return dataArr;
