@@ -1,32 +1,33 @@
 <div class="all">
-    <div class="search-bar">
-        <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" (change)="fileChangeListener($event)" accept=".csv" />
-        <input style="font-size:18pt;height:30px;width:200px;" type="text" #input>
-        <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
-        <div>{{procent}}%</div>{{znalezione}}/{{szukane}}
-        <button (click)="executeList()">Execute List</button>
-        <div>{{FoundedTags}} / {{searchesTags}}</div>
-    </div>
-    <div class="lists">
-        <div class="list-wrapper">
-            <div class="list-header">tags</div>
-            <div class="list">
-                <span class="list-item" *ngFor="let item of listOfTags">
-                    <span class="list-item-name">{{item.name}}</span>
-                    <span class="list-item-value">{{item.value}}</span>
-                </span>
-            </div>
+        <div class="search-bar" *ngIf = "!drawTree">
+            <input type="file" #fileImportInput name="File Upload" id="txtFileUpload" (change)="fileChangeListener($event)" accept=".csv" />
+            <input style="font-size:18pt;height:30px;width:200px;" type="text" #input>
+            <button style="font-size:14pt;height:25px;width:200px;" (click)="search(input.value)">Search</button>
+            <div>{{procent}}%</div>{{znalezione}}/{{szukane}}
+            <button (click)="executeList()">Execute List</button>
+            <div>{{FoundedTags}} / {{searchesTags}}</div>
+            <button (click)="drawTree = !drawTree">Draw Tree</button>            
         </div>
-        <div class="list-wrapper">
-            <div class="list-header">frequency list</div>
-            <div class="list">
-                <span class="list-item" *ngFor="let item of helpList">
-                    <span class="list-item-name">{{item.name}}</span>
-                    <span class="list-item-value">{{item.value}}</span>
-                </span>
+        <div class="lists">
+            <div class="list-wrapper">
+                <div class="list-header">tags</div>
+                <div class="list">
+                    <span class="list-item" *ngFor="let item of listOfTags">
+                        <span class="list-item-name">{{item.name}}</span>
+                        <span class="list-item-value">{{item.value}}</span>
+                    </span>
+                </div>
             </div>
+            <div class="list-wrapper">
+                <div class="list-header">frequency list</div>
+                <div class="list">
+                    <span class="list-item" *ngFor="let item of helpList">
+                        <span class="list-item-name">{{item.name}}</span>
+                        <span class="list-item-value">{{item.value}}</span>
+                    </span>
+                </div>
+            </div>        
         </div>
-    </div>
         <!-- <div class="panel">
           <div *ngFor="let item of outputTable; index as i" class="input-panel">
             <div class="input-fields">
@@ -74,7 +75,6 @@
           </div>
           <button class="finish-button" (click)="finish()">Finish</button>
         </div> -->
-    <button (click)="drawTree = !drawTree">Draw Tree</button>
     <app-graphic-tree
         [listOfTags]='listOfTags'
         [allRelationsTable]='final' 

@@ -1,7 +1,7 @@
 .top-list {
     display: flex;
     flex-direction: row;
-    width: 85vw;
+    width: 98vw;
     margin: 0 auto;
     border: 1px solid black;
 }
@@ -78,3 +78,8 @@
     display: inline-block;
     text-align: left;
 }
+
+@media print {
+    .second-level, .relName, .synset-words, .second-level-relations {page-break-inside: avoid;}
+    .relName { word-break: break-all;}
+  }

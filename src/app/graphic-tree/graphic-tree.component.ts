@@ -29,7 +29,7 @@ export class GraphicTreeComponent implements OnInit {
 
     // slowo sprowadzam do malych liter bo w liscie czestosci oraz tagow sa z malych liter
     const formatedWord = actualWord.replace(/\([a-z]*\)/g, '').replace(/\s*\d+\s*/g, '').toLowerCase();
-    let result = 0;
+    let result;
     if (!sourceID) {
       // w pierwszej kolumnie sprawdzam sa tagi wiec sprawdzam bez zmiany wielkosci na liscie tagow
       if (this.listOfTags.find(obj => obj.name.toLowerCase() === formatedWord)) {
@@ -39,12 +39,25 @@ export class GraphicTreeComponent implements OnInit {
       if (synsetID === sourceID) {
         result = -1;
       } else {
-          if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord)) {
-            if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value === 'tag'
-            || this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value > result) {
+          if (this.listOfFrequencies.filter(obj => obj.name.toLowerCase() === formatedWord).length === 2) {
+            let r = this.listOfFrequencies.filter(obj => obj.name.toLowerCase() === formatedWord) 
+            // jezeli sa dwa wyniki to musi byc i tag i lista czestosci, bo przeciez wczesnej filtruje powtorki
+            let fromTag = r.find(obj => obj.value === 'tag').value;
+            let fromList = r.find(obj => obj.value !== 'tag').value;
+            result = fromTag + '/fl(' + fromList + ')';
+          } else {
+            if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord)) {
               result = this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value;
+            } else {
+              result = 0;
             }
           }
+          // if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord)) {
+          //   if (this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value === 'tag'
+          //   || this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value > result) {
+          //     result = this.listOfFrequencies.find(obj => obj.name.toLowerCase() === formatedWord).value;
+          //   }
+          // }
       }
     }
     return result;
