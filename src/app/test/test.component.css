@@ -79,6 +79,7 @@
     padding: 0 20px;
     justify-content: center;
 }
+
 .list-header {
     text-align: center;
     font-size: 1.2rem;
@@ -96,4 +97,28 @@
 }
 .list-item-value {
     padding-left: 5px;
+}
+.list-fl {
+    font-size: 12px;
+    column-count: 8;
+    column-rule: 4px double black;
+    margin-top: 10px;
+    border: 1px solid black;
+}
+.list-item-fl {
+    /* border-top: 1px solid black; */
+    margin-bottom: -1px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px;
+}
+.list-item-name-fl {
+    word-break: break-all;
+}
+.list-item-value-fl {
+    padding-left: 5px;
+}
+@media print {
+    .list-fl {column-count: 4;}
 }

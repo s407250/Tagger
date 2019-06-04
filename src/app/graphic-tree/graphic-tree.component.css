@@ -1,3 +1,6 @@
+* {
+    font-size: 12px;
+}
 .top-list {
     display: flex;
     flex-direction: row;

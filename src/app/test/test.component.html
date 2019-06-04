@@ -20,11 +20,11 @@
             </div>
             <div class="list-wrapper">
                 <div class="list-header">frequency list</div>
-                <div class="list">
-                    <span class="list-item" *ngFor="let item of helpList">
-                        <span class="list-item-name">{{item.name}}</span>
-                        <span class="list-item-value">{{item.value}}</span>
-                    </span>
+                <div class="list-fl">
+                    <div class="list-item-fl" *ngFor="let item of helpList">
+                        <span class="list-item-name-fl">{{item.name}}</span>
+                        <span class="list-item-value-fl">{{item.value}}</span>
+                    </div>
                 </div>
             </div>        
         </div>
